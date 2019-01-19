@@ -6,13 +6,14 @@
 
 
 class JLV1 : public JinjSlave{
-  
+
  private:
-  
+
  public:
-  JLV1(char* name,char* conf_file,int address,AMSWcom* node);
+  JLV1(char* name,char* conf_file,int address,AMSWcom* node, int flagfake);
   ~JLV1();
   int Init();
+  int FlagFake;
   int SetMode(int modein);
   int GetEventNumber();
   char* PrintAllEventNumber(int log=1,int JLV1num=0);
@@ -23,7 +24,7 @@ class JLV1 : public JinjSlave{
   int TriggerOff();
   int CalibTriggerOn();
   int CalibTriggerOff();
-  
+
 };
 
 #endif

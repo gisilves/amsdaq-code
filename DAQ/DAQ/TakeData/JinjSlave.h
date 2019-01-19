@@ -14,8 +14,8 @@ class ConfPars{
   int type;
   u_short JLV1flash;
   u_short JINFflash;
-  u_short TDRflash; 
-  u_short delay; 
+  u_short TDRflash;
+  u_short delay;
   char DATAPATH[255];
   char CALPATH[255];
   char REMOTEPATH[255];
@@ -36,15 +36,16 @@ class ConfPars{
 
 class JinjSlave{
  public:
-  
+
   // FILE * logfile;
   char myname[20], myaction[20];
   int broadcastadd;
   int  selfaddress;
+  int FlagFake;
   int timestamp;
   AMSWcom *node;
   SlaveMask mask;
-  JinjSlave(char* name,char* conf_file,int address,AMSWcom* node);
+  JinjSlave(char* name,char* conf_file,int address,AMSWcom* node, int flagfake);
   ~JinjSlave();
   ConfPars *CPars;
   int jinfevents[2];
@@ -57,7 +58,7 @@ class JinjSlave{
   virtual char* PrintAllEventNumber(int log=1,int jinjslavenum=0){};
   virtual int EventReset(){};
  private:
-  
+
 };
 
 #endif

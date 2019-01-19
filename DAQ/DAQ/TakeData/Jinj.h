@@ -40,8 +40,8 @@ class Jinj{
 		int NSlave;
 		JinjSlave* Slave[24];
 		int SlaveAdd[24];
-		bool FlagFake;
-		Jinj(const char* name, const char* conf_file, int address, AMSWcom* node_in, bool flagfake); // gcc 4.3: added 'const'
+		int FlagFake;
+		Jinj(const char* name, const char* conf_file, int address, AMSWcom* node_in, int flagfake); // gcc 4.3: added 'const'
 		~Jinj();
 		int SelfInit();
 		int InitJinfs();

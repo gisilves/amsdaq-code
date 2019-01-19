@@ -37,7 +37,7 @@ static double MIPSIG[2] = {40.0, 40.0};
 
 //!  Tracker Cluster class.
 /*!  Tracker Cluser class contains all the information about a Cluster
- */
+*/
 
 //class Event;//forward declaration
 
@@ -102,7 +102,7 @@ public:
   void Clear();
   //! Returns the address of the first strip in the cluster
   int GetAddress();
-    //! Returns the lenght of the cluster
+  //! Returns the lenght of the cluster
   int   GetLength();
   //! Returns the position of the seed in the Signal vector
   int   GetSeed();

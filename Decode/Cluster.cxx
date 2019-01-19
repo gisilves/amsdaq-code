@@ -108,15 +108,15 @@ float Cluster::GetCSignal(int aa){
   //   }
   //   if (side==1) return c1-corr;
   //   else return c1;
-  
+
   float par0=Event::GetGainCorrectionPar(GetJinf(), GetTDR(), GetVA(aa), 0);
   float par1=Event::GetGainCorrectionPar(GetJinf(), GetTDR(), GetVA(aa), 1);
   //float par2=Event::GetGainCorrectionPar(GetJinf(), GetTDR(), GetVA(aa), 2);//PER ADESSO CE NE SONO SOLO 2!!!
-  
+
   //float correctSignal = (Signal[aa]*par2*(1-par1)+par0*par2);
   float correctSignal = (par1*Signal[aa]+par0);
-  
- return  correctSignal;
+
+  return  correctSignal;
 }
 
 //why not simply 'return lenght'?
@@ -124,11 +124,11 @@ int Cluster::GetLenght(float val){
   int se=GetSeed();
   int myle=1;
   for (int ii=se-1;ii>=0;ii--)
-    if(GetCSignal(ii)/Noise[ii]>val) myle++;
-    else break;
+  if(GetCSignal(ii)/Noise[ii]>val) myle++;
+  else break;
   for (int ii=se+1;ii<length;ii++)
-    if(GetCSignal(ii)/Noise[ii]>val) myle++;
-    else break;
+  if(GetCSignal(ii)/Noise[ii]>val) myle++;
+  else break;
   return myle;
 }
 
@@ -239,8 +239,8 @@ void Cluster::ApplyVAEqualization(){
   for(int ii=0;ii<length;ii++){
     int vanum=GetVA(address+ii);
     SignalVAEqualized[ii]=
-      Signal[ii]*Event::GetGainCorrectionPar(jinfnum,tdrnum,vanum,0)
-      *Event::GetGainCorrectionPar(jinfnum,tdrnum,vanum,1);
+    Signal[ii]*Event::GetGainCorrectionPar(jinfnum,tdrnum,vanum,0)
+    *Event::GetGainCorrectionPar(jinfnum,tdrnum,vanum,1);
   }
   return;
 }
@@ -293,7 +293,7 @@ float Cluster::GetSeedSN(){
 
 float Cluster::GetTotSN(){
 
-return GetTotSig()/GetTotNoise();
+  return GetTotSig()/GetTotNoise();
 }
 
 int Cluster::GetLength(){
@@ -304,12 +304,12 @@ int Cluster::GetLength(){
 void Cluster::Print(){
 
   printf(" ladd: %d  side: %d add: %d len: %d bad: %d \n",
-         ladder,side,address,length,bad);
+  ladder,side,address,length,bad);
   printf(" Seed: %d SeedAddress: %d Seed:val %f SeedSN: %f \n",GetSeed(),GetSeedAdd(),GetSeedVal(),GetSeedSN());
   printf(" Strip:       Signal:     Noise:       Status: \n");
   for(int ii=0;ii<length;ii++){
     printf("    %d      %f       %f       %d \n",
-	   ii, GetCSignal(ii), Noise[ii], Status[ii]);
+    ii, GetCSignal(ii), Noise[ii], Status[ii]);
   }
 
   return;
@@ -321,15 +321,15 @@ int Cluster::GoldRegion(){
   int  upgold[6][2]={{340,830},{150,850},{400,710},{460,710},{450,920},{480,710}};
 
   if(GetCoG()>lowgold[ladder][side]&&
-     GetCoG()<=upgold[ladder][side]) return 1;
+  GetCoG()<=upgold[ladder][side]) return 1;
   else return 0;
 }
 
 bool Cluster::BorderRegion(){
-  int width = 5;
+  int width = 2;
   bool onborder= false;
   int border = 64;
-  
+
   while(!onborder && border<1024){
     if(GetCoG() > border-width && GetCoG() < border+width){
       onborder = true;

@@ -57,17 +57,17 @@ Event::Event(){
   Evtnum=0;
   JINJStatus=0;
   for (int ii=0;ii<NJINF;ii++)
-    JINFStatus[ii]=0;
+  JINFStatus[ii]=0;
 
   for(int ii=0;ii<NTDRS;ii++){
     ReadTDR[ii]=0;
     TDRStatus[ii]=31;
     for(int jj=0;jj<NVAS;jj++)
-      CNoise[ii][jj]=0;
+    CNoise[ii][jj]=0;
     NClus[ii][0]=0;
     NClus[ii][1]=0;
   }
-  
+
   for(int kk=0;kk<8;kk++) {
     for(int ii=0;ii<1024;ii++) {
       CalSigma[kk][ii]=0.0;
@@ -76,7 +76,7 @@ Event::Event(){
       RawSoN[kk][ii]=0.0;
     }
   }
-  
+
   //  RawLadder = new TClonesArray("RawData", NJINF*8);//NJINFS*8 is the maximum number of ladder in raw mode that can me read by a single jinf.
 
   NClusTot=0;
@@ -102,7 +102,7 @@ Event::~Event(){
 void Event::Clear(){
   JINJStatus=0;
   for (int ii=0;ii<NJINF;ii++)
-    JINFStatus[ii]=0;
+  JINFStatus[ii]=0;
 
   NClusTot=0;
 
@@ -110,7 +110,7 @@ void Event::Clear(){
     ReadTDR[ii]=0;
     TDRStatus[ii]=31;
     for(int jj=0;jj<NVAS;jj++)
-      CNoise[ii][jj]=0;
+    CNoise[ii][jj]=0;
     NClus[ii][0]=0;
     NClus[ii][1]=0;
   }
@@ -123,7 +123,7 @@ void Event::Clear(){
       RawSoN[ii][kk]=0.0;
     }
   }
-  
+
   if(Cls) Cls->Delete();
 
   //   for (int ii=Cls->GetEntries();ii>-1;ii--){
@@ -151,12 +151,12 @@ Cluster* Event::GetCluster(int ii){
 
 /*
 int Event::NGoldenClus(int lad, int side){
-  int num=0;
-  for (int ii=0;ii<NClusTot;ii++){
-    Cluster* cl=GetCluster(ii);
-    if(cl->ladder==lad&&cl->side==side&&cl->golden==1) num++;
-  }
-  return num;
+int num=0;
+for (int ii=0;ii<NClusTot;ii++){
+Cluster* cl=GetCluster(ii);
+if(cl->ladder==lad&&cl->side==side&&cl->golden==1) num++;
+}
+return num;
 }
 */
 
@@ -176,7 +176,7 @@ void Event::ReadAlignment(TString filename, bool DEBUG){
   for (int jj=0; jj<NJINF; jj++) {
     for (int tt=0; tt<NTDRS; tt++) {
       for (int cc=0; cc<3; cc++) {
-	alignpar[jj][tt][cc]=0.0;
+        alignpar[jj][tt][cc]=0.0;
       }
       multflip[jj][tt]=false;
     }
@@ -197,22 +197,22 @@ void Event::ReadAlignment(TString filename, bool DEBUG){
   else {
     while(1){
       if (fgets(line, dimline, ft)!=NULL) {
-	if (*line == '#') continue; /* ignore comment line */
-	else {
-	  sscanf(line, "%d\t%d\t%f\t%f\t%f\t%d", &jinfnum, &tdrnum, &dummy, &dummy, &dummy, &dummyint);
-	  if (jinfnum<NJINF && tdrnum<NTDRS) {
-	    sscanf(line,"%d\t%d\t%f\t%f\t%f\t%d", &jinfnum, &tdrnum, &alignpar[jinfnum][tdrnum][0], &alignpar[jinfnum][tdrnum][1], &alignpar[jinfnum][tdrnum][2], &dummyint);
-	    multflip[jinfnum][tdrnum]=(bool)(dummyint);
-	  }
-	  else {
-	    printf("Wrong JINF/TDR (%d, %d): maximum is (%d,%d)\n", jinfnum, tdrnum, NJINF, NTDRS);
-	  }
-	}
+        if (*line == '#') continue; /* ignore comment line */
+        else {
+          sscanf(line, "%d\t%d\t%f\t%f\t%f\t%d", &jinfnum, &tdrnum, &dummy, &dummy, &dummy, &dummyint);
+          if (jinfnum<NJINF && tdrnum<NTDRS) {
+            sscanf(line,"%d\t%d\t%f\t%f\t%f\t%d", &jinfnum, &tdrnum, &alignpar[jinfnum][tdrnum][0], &alignpar[jinfnum][tdrnum][1], &alignpar[jinfnum][tdrnum][2], &dummyint);
+            multflip[jinfnum][tdrnum]=(bool)(dummyint);
+          }
+          else {
+            printf("Wrong JINF/TDR (%d, %d): maximum is (%d,%d)\n", jinfnum, tdrnum, NJINF, NTDRS);
+          }
+        }
       }
       else {
-	printf(" closing alignment file \n");
-	  fclose(ft);
-	  break;
+        printf(" closing alignment file \n");
+        fclose(ft);
+        break;
       }
     }
   }
@@ -224,9 +224,9 @@ void Event::ReadAlignment(TString filename, bool DEBUG){
   for (int jj=0; jj<NJINF; jj++) {
     for (int tt=0; tt<NTDRS; tt++) {
       for (int cc=0; cc<3; cc++) {
-	if (cc==0) printf("JINF %02d TDR %02d)\t", jj, tt);
-	printf("%f\t", alignpar[jj][tt][cc]);
-	if (cc==2) printf("%d\n", (int)(multflip[jj][tt]));
+        if (cc==0) printf("JINF %02d TDR %02d)\t", jj, tt);
+        printf("%f\t", alignpar[jj][tt][cc]);
+        if (cc==2) printf("%d\n", (int)(multflip[jj][tt]));
       }
     }
   }
@@ -242,8 +242,8 @@ void Event::ReadGainCorrection(TString filename, bool DEBUG){
   for (int jj=0; jj<NJINF; jj++) {
     for (int tt=0; tt<NTDRS; tt++) {
       for (int vv=0; vv<NVAS; vv++) {
-	gaincorrectionpar[jj][tt][vv][0]=0.0;
-	gaincorrectionpar[jj][tt][vv][1]=1.0;
+        gaincorrectionpar[jj][tt][vv][0]=0.0;
+        gaincorrectionpar[jj][tt][vv][1]=1.0;
       }
     }
   }
@@ -261,12 +261,12 @@ void Event::ReadGainCorrection(TString filename, bool DEBUG){
     printf("Error: cannot open %s , setting all gain corrections to default \n", filename.Data());
     for (int jj=0; jj<NJINF; jj++) {
       for (int tt=0; tt<NTDRS; tt++) {
-	for (int vv=0; vv<NVAS; vv++) {
-	  for (int cc=0; cc<2; cc++) {
-	    gaincorrectionpar[jj][tt][vv][0]=0.0;
-	    gaincorrectionpar[jj][tt][vv][1]=1.0;
-	  }
-	}
+        for (int vv=0; vv<NVAS; vv++) {
+          for (int cc=0; cc<2; cc++) {
+            gaincorrectionpar[jj][tt][vv][0]=0.0;
+            gaincorrectionpar[jj][tt][vv][1]=1.0;
+          }
+        }
       }
     }
 
@@ -275,33 +275,33 @@ void Event::ReadGainCorrection(TString filename, bool DEBUG){
   else {
     while(1){
       if (fgets(line, dimline, ft)!=NULL) {
-	if (*line == '#') continue; /* ignore comment line */
-	else {
-	  sscanf(line, "%d\t%d\t%d\t%f\t%f",
-		 &jinfnum, &tdrnum, &vanum, &dummy, &dummy);
-	  if (jinfnum<NJINF && tdrnum<NTDRS && vanum<NVAS ) {
-	    sscanf(
-		   line,"%d \t %d \t %d \t %f \t %f",
-		   &jinfnum, &tdrnum, &vanum,
-		   &gaincorrectionpar[jinfnum][tdrnum][vanum][0],
-		   &gaincorrectionpar[jinfnum][tdrnum][vanum][1]
-		   );
-	  }
-	  else {
-	    printf("Wrong JINF/TDR/VA (%d, %d, %d): maximum is (%d,%d, %d)\n", jinfnum, tdrnum, vanum, NJINF, NTDRS, NVAS);
-	  }
-	}
+        if (*line == '#') continue; /* ignore comment line */
+        else {
+          sscanf(line, "%d\t%d\t%d\t%f\t%f",
+          &jinfnum, &tdrnum, &vanum, &dummy, &dummy);
+          if (jinfnum<NJINF && tdrnum<NTDRS && vanum<NVAS ) {
+            sscanf(
+              line,"%d \t %d \t %d \t %f \t %f",
+              &jinfnum, &tdrnum, &vanum,
+              &gaincorrectionpar[jinfnum][tdrnum][vanum][0],
+              &gaincorrectionpar[jinfnum][tdrnum][vanum][1]
+            );
+          }
+          else {
+            printf("Wrong JINF/TDR/VA (%d, %d, %d): maximum is (%d,%d, %d)\n", jinfnum, tdrnum, vanum, NJINF, NTDRS, NVAS);
+          }
+        }
       }
       else {
-	printf(" closing gain correction file \n");
-	fclose(ft);
-	break;
+        printf(" closing gain correction file \n");
+        fclose(ft);
+        break;
       }
     }
   }
-  
+
   gaincorrectionnotread=false;
-  
+
   //  if(DEBUG==false) return;
   // per ora (finche' il lavoro non e' finito) utile mostrare la tabellina dei TDR  con valori non di default, perchè NON dovrebbero esserci!
   bool first=true;
@@ -309,18 +309,18 @@ void Event::ReadGainCorrection(TString filename, bool DEBUG){
   for (int jj=0; jj<NJINF; jj++) {
     for (int tt=0; tt<NTDRS; tt++) {
       for (int vv=0; vv<NVAS; vv++) {
-	if (gaincorrectionpar[jj][tt][vv][0] == 0.0 && gaincorrectionpar[jj][tt][vv][1] == 1.0) continue;
-	if (first) {
-	  printf("***************************************\n");
-	  printf("***************************************\n");
-	  printf("Non-default gain correction parameters:\n");
-	}
-	first=false;
-	everdone=true;
-	printf("JINF %02d TDR %02d VA %02d)\t", jj, tt, vv);
-	printf("%f\t", gaincorrectionpar[jj][tt][vv][0]);
-	printf("%f\t", gaincorrectionpar[jj][tt][vv][1]);
-	printf("\n");
+        if (gaincorrectionpar[jj][tt][vv][0] == 0.0 && gaincorrectionpar[jj][tt][vv][1] == 1.0) continue;
+        if (first) {
+          printf("***************************************\n");
+          printf("***************************************\n");
+          printf("Non-default gain correction parameters:\n");
+        }
+        first=false;
+        everdone=true;
+        printf("JINF %02d TDR %02d VA %02d)\t", jj, tt, vv);
+        printf("%f\t", gaincorrectionpar[jj][tt][vv][0]);
+        printf("%f\t", gaincorrectionpar[jj][tt][vv][1]);
+        printf("\n");
       }
     }
   }
@@ -527,30 +527,30 @@ bool Event::FindHigherChargeTrackAndFit(int nptsS, double threshS, int nptsK, do
     int side=current_cluster->side;
     if (side==0) {
       if (current_cluster->GetTotSN()>threshS) {
-	if (v_q_laddS[jinfnum][tdrnum].size()==0) {
-	  v_cog_laddS[jinfnum][tdrnum].push_back(std::make_pair(index_cluster, std::make_pair(current_cluster->GetAlignedPosition(), GetAlignPar(jinfnum, tdrnum, 2))));
-	  v_q_laddS[jinfnum][tdrnum].push_back(current_cluster->GetCharge());
-	}
-	else {
-	  if (current_cluster->GetCharge()>v_q_laddS[jinfnum][tdrnum][0]) {
-	    v_cog_laddS[jinfnum][tdrnum][0] = std::make_pair(index_cluster, std::make_pair(current_cluster->GetAlignedPosition(), GetAlignPar(jinfnum, tdrnum, 2)));
-	    v_q_laddS[jinfnum][tdrnum][0] = current_cluster->GetCharge();
-	  }
-	}
+        if (v_q_laddS[jinfnum][tdrnum].size()==0) {
+          v_cog_laddS[jinfnum][tdrnum].push_back(std::make_pair(index_cluster, std::make_pair(current_cluster->GetAlignedPosition(), GetAlignPar(jinfnum, tdrnum, 2))));
+          v_q_laddS[jinfnum][tdrnum].push_back(current_cluster->GetCharge());
+        }
+        else {
+          if (current_cluster->GetCharge()>v_q_laddS[jinfnum][tdrnum][0]) {
+            v_cog_laddS[jinfnum][tdrnum][0] = std::make_pair(index_cluster, std::make_pair(current_cluster->GetAlignedPosition(), GetAlignPar(jinfnum, tdrnum, 2)));
+            v_q_laddS[jinfnum][tdrnum][0] = current_cluster->GetCharge();
+          }
+        }
       }
     }
     else {
       if (current_cluster->GetTotSN()>threshK) {
-	if (v_q_laddK[jinfnum][tdrnum].size()==0) {
-	  v_cog_laddK[jinfnum][tdrnum].push_back(std::make_pair(index_cluster, std::make_pair(current_cluster->GetAlignedPosition(), GetAlignPar(jinfnum, tdrnum, 2))));
-	  v_q_laddK[jinfnum][tdrnum].push_back(current_cluster->GetCharge());
-	}
-	else {
-	  if (current_cluster->GetCharge()>v_q_laddK[jinfnum][tdrnum][0]) {
-	    v_cog_laddK[jinfnum][tdrnum][0] = std::make_pair(index_cluster, std::make_pair(current_cluster->GetAlignedPosition(), GetAlignPar(jinfnum, tdrnum, 2)));
-	    v_q_laddK[jinfnum][tdrnum][0] = current_cluster->GetCharge();
-	  }
-	}
+        if (v_q_laddK[jinfnum][tdrnum].size()==0) {
+          v_cog_laddK[jinfnum][tdrnum].push_back(std::make_pair(index_cluster, std::make_pair(current_cluster->GetAlignedPosition(), GetAlignPar(jinfnum, tdrnum, 2))));
+          v_q_laddK[jinfnum][tdrnum].push_back(current_cluster->GetCharge());
+        }
+        else {
+          if (current_cluster->GetCharge()>v_q_laddK[jinfnum][tdrnum][0]) {
+            v_cog_laddK[jinfnum][tdrnum][0] = std::make_pair(index_cluster, std::make_pair(current_cluster->GetAlignedPosition(), GetAlignPar(jinfnum, tdrnum, 2)));
+            v_q_laddK[jinfnum][tdrnum][0] = current_cluster->GetCharge();
+          }
+        }
       }
     }
   }
@@ -569,14 +569,14 @@ bool Event::FindHigherChargeTrackAndFit(int nptsS, double threshS, int nptsK, do
 }
 
 double Event::CombinatorialFit(
-			     std::vector<std::pair<int, std::pair<double, double> > > v_cog_laddS[NJINF][NTDRS],
-			     std::vector<std::pair<int, std::pair<double, double> > > v_cog_laddK[NJINF][NTDRS],
-			     int ijinf, int itdr,
-			     std::vector<std::pair<int, std::pair<double, double> > > v_cog_trackS,
-			     std::vector<std::pair<int, std::pair<double, double> > > v_cog_trackK,
-			     int nptsS, int nptsK,
-			     bool verbose
-			     ){
+  std::vector<std::pair<int, std::pair<double, double> > > v_cog_laddS[NJINF][NTDRS],
+  std::vector<std::pair<int, std::pair<double, double> > > v_cog_laddK[NJINF][NTDRS],
+  int ijinf, int itdr,
+  std::vector<std::pair<int, std::pair<double, double> > > v_cog_trackS,
+  std::vector<std::pair<int, std::pair<double, double> > > v_cog_trackK,
+  int nptsS, int nptsK,
+  bool verbose
+){
   //  printf("ijinf = %d, itdr = %d\n", ijinf, itdr);
 
   if (itdr==0) {
@@ -669,29 +669,29 @@ void Event::AssignAsBestTrackFit(){
 }
 
 double Event::SingleFit(
-			std::vector<std::pair<int, std::pair<double, double> > > vS,
-			std::vector<std::pair<int, std::pair<double, double> > > vK,
-			bool verbose
-			){
+  std::vector<std::pair<int, std::pair<double, double> > > vS,
+  std::vector<std::pair<int, std::pair<double, double> > > vK,
+  bool verbose
+){
 
   ClearTrack_sf();
 
   /* debug
-     static TH1F hchi("hchi", "hchi", 1000, 0.0, 10.0);
-     static TH1F htheta("htheta", "htheta", 1000, -TMath::Pi()/2.0, TMath::Pi()/2.0);
-     static TH1F hphi("hphi", "hphi", 1000, -TMath::Pi(), TMath::Pi());
-     static TH1F hx0("hx0", "hx0", 1000, -1000.0, 1000.0);
-     static TH1F hy0("hy0", "hy0", 1000, -1000.0, 1000.0);
+  static TH1F hchi("hchi", "hchi", 1000, 0.0, 10.0);
+  static TH1F htheta("htheta", "htheta", 1000, -TMath::Pi()/2.0, TMath::Pi()/2.0);
+  static TH1F hphi("hphi", "hphi", 1000, -TMath::Pi(), TMath::Pi());
+  static TH1F hx0("hx0", "hx0", 1000, -1000.0, 1000.0);
+  static TH1F hy0("hy0", "hy0", 1000, -1000.0, 1000.0);
   */
 
   chisq_sf = SingleFit(vS, vK, v_chilayS_sf, v_chilayK_sf, theta_sf, thetaerr_sf, phi_sf, phierr_sf, iDirX_sf, iDirXerr_sf, iDirY_sf, iDirYerr_sf, iDirZ_sf, iDirZerr_sf, mX_sf, mXerr_sf, mY_sf, mYerr_sf, X0_sf, X0err_sf, Y0_sf, Y0err_sf, chisqx_sf, chisqy_sf, verbose);
 
   /*
-    hchi.Fill(log10(chisq_sf));
-    htheta.Fill(theta_sf);
-    hphi.Fill(phi_sf);
-    hx0.Fill(X0_sf);
-    hy0.Fill(Y0_sf);
+  hchi.Fill(log10(chisq_sf));
+  htheta.Fill(theta_sf);
+  hphi.Fill(phi_sf);
+  hx0.Fill(X0_sf);
+  hy0.Fill(Y0_sf);
   */
 
   if (verbose) printf("chisq: %f, chisqx: %f, chisqy: %f, theta = %f, phi = %f, X0 = %f, Y0 = %f\n", chisq_sf, chisqx_sf, chisqy_sf, theta_sf, phi_sf, X0_sf, Y0_sf);
@@ -700,247 +700,247 @@ double Event::SingleFit(
 }
 
 double Event::SingleFit(
-			std::vector<std::pair<int, std::pair<double, double> > > vS,
-			std::vector<std::pair<int, std::pair<double, double> > > vK,
-			std::vector<double>& v_chilayS,
-			std::vector<double>& v_chilayK,
-			double& theta, double& thetaerr,
-			double& phi, double& phierr,
-			double& iDirX, double& iDirXerr,
-			double& iDirY, double& iDirYerr,
-			double& iDirZ, double& iDirZerr,
-			double& mX, double& mXerr,
-			double& mY, double& mYerr,
-			double& X0, double& X0err,
-			double& Y0, double& Y0err,
-			double& chisqx, double& chisqy,
-			bool verbose){
+  std::vector<std::pair<int, std::pair<double, double> > > vS,
+  std::vector<std::pair<int, std::pair<double, double> > > vK,
+  std::vector<double>& v_chilayS,
+  std::vector<double>& v_chilayK,
+  double& theta, double& thetaerr,
+  double& phi, double& phierr,
+  double& iDirX, double& iDirXerr,
+  double& iDirY, double& iDirYerr,
+  double& iDirZ, double& iDirZerr,
+  double& mX, double& mXerr,
+  double& mY, double& mYerr,
+  double& X0, double& X0err,
+  double& Y0, double& Y0err,
+  double& chisqx, double& chisqy,
+  bool verbose){
 
-  v_trackS_sf = vS;
-  v_trackK_sf = vK;
+    v_trackS_sf = vS;
+    v_trackK_sf = vK;
 
-  for(int ic=0; ic<(int)vS.size(); ic++) v_trackErrS_sf.push_back( GetCluster(vS.at(ic).first)->GetNominalResolution(0) );
-  for(int ic=0; ic<(int)vK.size(); ic++) v_trackErrK_sf.push_back( GetCluster(vK.at(ic).first)->GetNominalResolution(1) );
+    for(int ic=0; ic<(int)vS.size(); ic++) v_trackErrS_sf.push_back( GetCluster(vS.at(ic).first)->GetNominalResolution(0) );
+    for(int ic=0; ic<(int)vK.size(); ic++) v_trackErrK_sf.push_back( GetCluster(vK.at(ic).first)->GetNominalResolution(1) );
 
-  Double_t corrXmX, corrYmY;
+    Double_t corrXmX, corrYmY;
 
-  //The fit is done independently in the two X and Y views
-  //The fit returns X0 and mX (the angular coefficient)
-  //mX = vx/vz, where vx and vz are the projection of the straight line versors into the X and Z axis
-  //Considering the definition of directive cosines
-  //dirX = vx / |v|   with |v| = sqrt( vx*vx + vy*vy + vz*vz)
-  //dirY = vy / |v|   with |v| = sqrt( vx*vx + vy*vy + vz*vz)
-  //dirZ = vZ / |v|   with |v| = sqrt( vx*vx + vy*vy + vz*vz)
-  //dirX*dirX + dirY*dirY + dirZ*dirZ = 1
-  //then we have
-  //mX = dirX/dirZ
-  //mY = dirY/dirZ
-  //and after both two fits, we can calculate
-  //dirZ = 1  / sqrt( 1 + mX*mX + mY*mY)
-  //dirX = mX / sqrt( 1 + mX*mX + mY*mY)
-  //dirY = mY / sqrt( 1 + mX*mX + mY*mY)
+    //The fit is done independently in the two X and Y views
+    //The fit returns X0 and mX (the angular coefficient)
+    //mX = vx/vz, where vx and vz are the projection of the straight line versors into the X and Z axis
+    //Considering the definition of directive cosines
+    //dirX = vx / |v|   with |v| = sqrt( vx*vx + vy*vy + vz*vz)
+    //dirY = vy / |v|   with |v| = sqrt( vx*vx + vy*vy + vz*vz)
+    //dirZ = vZ / |v|   with |v| = sqrt( vx*vx + vy*vy + vz*vz)
+    //dirX*dirX + dirY*dirY + dirZ*dirZ = 1
+    //then we have
+    //mX = dirX/dirZ
+    //mY = dirY/dirZ
+    //and after both two fits, we can calculate
+    //dirZ = 1  / sqrt( 1 + mX*mX + mY*mY)
+    //dirX = mX / sqrt( 1 + mX*mX + mY*mY)
+    //dirY = mY / sqrt( 1 + mX*mX + mY*mY)
 
-#ifdef USEMINUIT
-  //Minuit fit
-  static TMinuit* minuit = NULL;
-  if (!minuit) minuit = new TMinuit();
-  //  minuit->Clear();
-  minuit->SetPrintLevel((int)(verbose)-1);
-  minuit->SetFCN(_fcn);
+    #ifdef USEMINUIT
+    //Minuit fit
+    static TMinuit* minuit = NULL;
+    if (!minuit) minuit = new TMinuit();
+    //  minuit->Clear();
+    minuit->SetPrintLevel((int)(verbose)-1);
+    minuit->SetFCN(_fcn);
 
-  Double_t arglist[10];
-  Int_t ierflg = 0;
-  arglist[0] = 1;//chi-sq err-def
-  minuit->mnexcm("SET ERR", arglist, 1, ierflg);
+    Double_t arglist[10];
+    Int_t ierflg = 0;
+    arglist[0] = 1;//chi-sq err-def
+    minuit->mnexcm("SET ERR", arglist, 1, ierflg);
 
-  // Set starting values and step sizes for parameters
-  static Double_t vstart[5] = {0.0, 0.0 , 0.0 , 0.0, 0.0};
-  static Double_t step[5] =   {1.0e-5 , 1.0e-5 , 1.0e-5 , 1.0e-5};
-  minuit->mnparm(0, "mX", vstart[0], step[0], 0, 0, ierflg);
-  minuit->mnparm(1, "mY", vstart[1], step[1], 0, 0, ierflg);
-  minuit->mnparm(2, "X0", vstart[2], step[2], 0,0, ierflg);
-  minuit->mnparm(3, "Y0", vstart[3], step[3], 0,0, ierflg);
+    // Set starting values and step sizes for parameters
+    static Double_t vstart[5] = {0.0, 0.0 , 0.0 , 0.0, 0.0};
+    static Double_t step[5] =   {1.0e-5 , 1.0e-5 , 1.0e-5 , 1.0e-5};
+    minuit->mnparm(0, "mX", vstart[0], step[0], 0, 0, ierflg);
+    minuit->mnparm(1, "mY", vstart[1], step[1], 0, 0, ierflg);
+    minuit->mnparm(2, "X0", vstart[2], step[2], 0,0, ierflg);
+    minuit->mnparm(3, "Y0", vstart[3], step[3], 0,0, ierflg);
 
-  // Now ready for minimization step
-  arglist[0] = 50000;
-  arglist[1] = 1.;
-  minuit->mnexcm("MIGRAD", arglist, 2, ierflg);
+    // Now ready for minimization step
+    arglist[0] = 50000;
+    arglist[1] = 1.;
+    minuit->mnexcm("MIGRAD", arglist, 2, ierflg);
 
-  // Print results
-  // Double_t amin,edm,errdef;
-  // Int_t nvpar,nparx,icstat;
-  // minuit->mnstat(amin, edm, errdef, nvpar, nparx, icstat);
-  // minuit->mnprin(3,amin);
+    // Print results
+    // Double_t amin,edm,errdef;
+    // Int_t nvpar,nparx,icstat;
+    // minuit->mnstat(amin, edm, errdef, nvpar, nparx, icstat);
+    // minuit->mnprin(3,amin);
 
-  minuit->GetParameter (0, mX, mXerr);
-  minuit->GetParameter (1, mY, mYerr);
-  minuit->GetParameter (2, X0, X0err);
-  minuit->GetParameter (3, Y0, Y0err);
+    minuit->GetParameter (0, mX, mXerr);
+    minuit->GetParameter (1, mY, mYerr);
+    minuit->GetParameter (2, X0, X0err);
+    minuit->GetParameter (3, Y0, Y0err);
 
-  Double_t covmat[4][4];
-  minuit->mnemat(&covmat[0][0],4);
-  corrXmX=-covmat[0][2]/(sqrt(covmat[0][0]*covmat[2][2])); //minus is because they shold be anticorrelated
-  corrYmY=-covmat[1][3]/(sqrt(covmat[1][1]*covmat[3][3]));
-#else
-  //Analytical Fit
+    Double_t covmat[4][4];
+    minuit->mnemat(&covmat[0][0],4);
+    corrXmX=-covmat[0][2]/(sqrt(covmat[0][0]*covmat[2][2])); //minus is because they shold be anticorrelated
+    corrYmY=-covmat[1][3]/(sqrt(covmat[1][1]*covmat[3][3]));
+    #else
+    //Analytical Fit
 
-  //Fit X
-  int nx = (int)(vS.size());
-  // Double_t S1=0;   for(int i=0; i<(int)nx; i++) S1  += 1./pow(Cluster::GetNominalResolution(0),2);
-  // Double_t Sz=0;   for(int i=0; i<(int)nx; i++) Sz  += vS.at(i).second.second/pow(Cluster::GetNominalResolution(0),2);
-  // Double_t Szz=0;  for(int i=0; i<(int)nx; i++) Szz += pow(vS.at(i).second.second,2)/pow(Cluster::GetNominalResolution(0),2);
-  // Double_t Sx=0;   for(int i=0; i<(int)nx; i++) Sx  += vS.at(i).second.first/pow(Cluster::GetNominalResolution(0),2);
-  // Double_t Szx=0;  for(int i=0; i<(int)nx; i++) Szx += (vS.at(i).second.first*vS.at(i).second.second)/pow(Cluster::GetNominalResolution(0),2);
-  Double_t S1=0, Sz=0, Szz=0, Sx=0, Szx=0;
-  for(int i=0; i<(int)nx; i++){ //Why 5 loops when you can do just one... WHY?!?!?!?
-    // printf("SingleFit: cluster %d, Jinf: %d, TDR %d\n", vS.at(i).first, GetCluster(vS.at(i).first)->GetJinf(), GetCluster(vS.at(i).first)->GetTDR());
-    S1  += 1./pow(GetCluster(vS.at(i).first)->GetNominalResolution(0),2);
-    Sz  += vS.at(i).second.second/pow(GetCluster(vS.at(i).first)->GetNominalResolution(0),2);
-    Szz += pow(vS.at(i).second.second,2)/pow(GetCluster(vS.at(i).first)->GetNominalResolution(0),2);
-    Sx  += vS.at(i).second.first/pow(GetCluster(vS.at(i).first)->GetNominalResolution(0),2);
-    Szx += (vS.at(i).second.first*vS.at(i).second.second)/pow(GetCluster(vS.at(i).first)->GetNominalResolution(0),2);
+    //Fit X
+    int nx = (int)(vS.size());
+    // Double_t S1=0;   for(int i=0; i<(int)nx; i++) S1  += 1./pow(Cluster::GetNominalResolution(0),2);
+    // Double_t Sz=0;   for(int i=0; i<(int)nx; i++) Sz  += vS.at(i).second.second/pow(Cluster::GetNominalResolution(0),2);
+    // Double_t Szz=0;  for(int i=0; i<(int)nx; i++) Szz += pow(vS.at(i).second.second,2)/pow(Cluster::GetNominalResolution(0),2);
+    // Double_t Sx=0;   for(int i=0; i<(int)nx; i++) Sx  += vS.at(i).second.first/pow(Cluster::GetNominalResolution(0),2);
+    // Double_t Szx=0;  for(int i=0; i<(int)nx; i++) Szx += (vS.at(i).second.first*vS.at(i).second.second)/pow(Cluster::GetNominalResolution(0),2);
+    Double_t S1=0, Sz=0, Szz=0, Sx=0, Szx=0;
+    for(int i=0; i<(int)nx; i++){ //Why 5 loops when you can do just one... WHY?!?!?!?
+      // printf("SingleFit: cluster %d, Jinf: %d, TDR %d\n", vS.at(i).first, GetCluster(vS.at(i).first)->GetJinf(), GetCluster(vS.at(i).first)->GetTDR());
+      S1  += 1./pow(GetCluster(vS.at(i).first)->GetNominalResolution(0),2);
+      Sz  += vS.at(i).second.second/pow(GetCluster(vS.at(i).first)->GetNominalResolution(0),2);
+      Szz += pow(vS.at(i).second.second,2)/pow(GetCluster(vS.at(i).first)->GetNominalResolution(0),2);
+      Sx  += vS.at(i).second.first/pow(GetCluster(vS.at(i).first)->GetNominalResolution(0),2);
+      Szx += (vS.at(i).second.first*vS.at(i).second.second)/pow(GetCluster(vS.at(i).first)->GetNominalResolution(0),2);
+    }
+
+    Double_t Dx = S1*Szz - Sz*Sz;
+    X0 = (Sx*Szz-Sz*Szx)/Dx;
+    //iDirX = (S1*Szx-Sz*Sx)/Dx; iDirX=-iDirX;
+    mX = (S1*Szx-Sz*Sx)/Dx; //mX=-mX;
+    X0err = sqrt(Szz/Dx);
+    //iDirXerr = sqrt(S1/Dx);
+    mXerr = sqrt(S1/Dx);
+    corrXmX = -Sz/sqrt(Szz*S1);
+
+    //Fit Y
+    int ny = (int)(vK.size());
+    //          S1=0;   for(int i=0; i<(int)ny; i++) S1  += 1./pow(Cluster::GetNominalResolution(1),2);
+    //          Sz=0;   for(int i=0; i<(int)ny; i++) Sz  += vK.at(i).second.second/pow(Cluster::GetNominalResolution(1),2);
+    //          Szz=0;  for(int i=0; i<(int)ny; i++) Szz += pow(vK.at(i).second.second,2)/pow(Cluster::GetNominalResolution(1),2);
+    // Double_t Sy=0;   for(int i=0; i<(int)ny; i++) Sy  += vK.at(i).second.first/pow(Cluster::GetNominalResolution(1),2);
+    // Double_t Szy=0;  for(int i=0; i<(int)ny; i++) Szy += (vK.at(i).second.first*vK.at(i).second.second)/pow(Cluster::GetNominalResolution(1),2);
+    Double_t Sy=0, Szy=0;
+    for(int i=0; i<(int)ny; i++){ //Why 5 loops when you can do just one... WHY?!?!?!?
+      // printf("SingleFit: cluster %d, Jinf: %d, TDR %d\n", vK.at(i).first, GetCluster(vK.at(i).first)->GetJinf(), GetCluster(vK.at(i).first)->GetTDR());
+      S1  += 1./pow(GetCluster(vK.at(i).first)->GetNominalResolution(1),2);
+      Sz  += vK.at(i).second.second/pow(GetCluster(vK.at(i).first)->GetNominalResolution(1),2);
+      Szz += pow(vK.at(i).second.second,2)/pow(GetCluster(vK.at(i).first)->GetNominalResolution(1),2);
+      Sy  += vK.at(i).second.first/pow(GetCluster(vK.at(i).first)->GetNominalResolution(1),2);
+      Szy += (vK.at(i).second.first*vK.at(i).second.second)/pow(GetCluster(vK.at(i).first)->GetNominalResolution(1),2);
+    }
+    Double_t Dy = S1*Szz - Sz*Sz;
+    Y0 = (Sy*Szz-Sz*Szy)/Dy;
+    //iDirY = (S1*Szy-Sz*Sy)/Dy; iDirY=-iDirY;
+    mY = (S1*Szy-Sz*Sy)/Dy; //mY=-mY;
+    Y0err = sqrt(Szz/Dy);
+    //iDirYerr = sqrt(S1/Dy);
+    mYerr = sqrt(S1/Dy);
+    corrYmY = -Sz/sqrt(Szz*S1);
+    #endif
+
+    //  printf("%f %f %f %f\n", mX, mY, X0, Y0);
+
+    //    dirX = mX * dirZ                 -->       dirX = mX / sqrt(1 + mX^2 + mY^2)
+    //    dirY = mY * dirZ                 -->       dirX = mY / sqrt(1 + mX^2 + mY^2)
+    //    dirZ = 1./sqrt(1 + mX^2 + mY^2)
+
+    //    ∂dirX/∂mX = +dirZ^3 * (1+mY^2)        ∂dirY/∂mX = -dirZ^3 * mX * mY       ∂dirZ/∂mX = -dirZ^3 * mX
+    //    ∂dirX/∂mY = -dirZ^3 * mX * mY         ∂dirY/∂mY = +dirZ^3 * (1+mX^2)      ∂dirZ/∂mY = -dirZ^3 * mY
+    //    corr(mX,mY)=0  since they come from independent fits
+
+    iDirZ = 1./sqrt(1 + mX*mX + mY*mY);
+    iDirX = mX * iDirZ;
+    iDirY = mY * iDirZ;
+    Double_t dDirXdmX = +iDirZ*iDirZ*iDirZ * (1+mY*mY);
+    Double_t dDirXdmY = -iDirZ*iDirZ*iDirZ * mX * mY;
+    Double_t dDirYdmX = -iDirZ*iDirZ*iDirZ * mX * mY;
+    Double_t dDirYdmY = +iDirZ*iDirZ*iDirZ * (1+mX*mX);
+    Double_t dDirZdmX = -iDirZ*iDirZ*iDirZ * mX;
+    Double_t dDirZdmY = -iDirZ*iDirZ*iDirZ * mY;
+    iDirXerr = sqrt( pow(dDirXdmX * mXerr, 2) + pow(dDirXdmY * mYerr, 2) );
+    iDirYerr = sqrt( pow(dDirYdmX * mXerr, 2) + pow(dDirYdmY * mYerr, 2) );
+    iDirZerr = sqrt( pow(dDirZdmX * mXerr, 2) + pow(dDirZdmY * mYerr, 2) );
+
+    //------------------------------------------------------------------------------------------
+
+    theta = std::acos(iDirZ);
+    phi = std::atan2(iDirY, iDirX);
+
+    //should not happen ------------
+    if (theta<0) {
+      theta = fabs(theta);
+      phi+=TMath::Pi();
+    }
+    if (phi>TMath::Pi()) {
+      phi-=2.0*TMath::Pi();
+    }
+    if (phi<-TMath::Pi()) {
+      phi+=2.0*TMath::Pi();
+    }
+    //------------------------------
+
+    //theta = acos( dirZ )        --> theta(mX,mY) = acos( 1./sqrt(1+mX*mX+mY*mY) )
+    //phi = atan (dirY/dirX)      --> phi(mX,mY)   = atan( mY/mX )
+    //
+    //∂phi/∂mX = -mY / (mX^2 + mY^2)                            ∂phi/∂mY = +mX / (mX^2 + mY^2)
+    //∂theta/∂mX = [(1+mX^2+mY^2)*sqrt(mX^2+mY^2)]^{-1}         ∂theta/∂mY = ∂theta/∂mX
+
+    double dthetadmX = 1./( (1 + mX*mX * mY*mY) * sqrt(mX*mX + mY*mY) );
+    double dthetadmY = 1./( (1 + mX*mX * mY*mY) * sqrt(mX*mX + mY*mY) );
+    double dphidmX   = -mY / (mX*mX + mY*mY);
+    double dphidmY   = +mX / (mX*mX + mY*mY);
+    thetaerr = sqrt( pow(dthetadmX*mXerr,2) + pow(dthetadmY*mYerr,2) );
+    phierr   = sqrt( pow(dphidmX*mXerr,2)   + pow(dphidmY*mYerr,2) );
+
+    //------------------------------------------------------------------------------------------
+
+    int ndofS = vS.size() - 2;
+    int ndofK = vK.size() - 2;
+
+    double chisqS = 0.0;
+    double chisqK = 0.0;
+    double chisq = 0.0;
+
+    if (ndofS>=0) {
+      chisqS = _compchisq(vS, v_chilayS, mX, X0, v_trackErrS_sf);
+      chisq += chisqS;
+    }
+    if (ndofK>=0) {
+      chisqK = _compchisq(vK, v_chilayK, mY, Y0, v_trackErrK_sf);
+      chisq += chisqK;
+    }
+
+    int ndof = ndofS + ndofK;
+    double ret = chisq/ndof;
+    if (ndof<=0) {
+      if (ndofS>0) ret = chisqS/ndofS;
+      else if (ndofK>0) ret = chisqK/ndofK;
+      else if (ndof==0) ret = 0.0;
+      else ret = -1.0;
+    }
+    chisqx = -1.0;
+    if (ndofS>0) chisqx = chisqS/ndofS;
+    else if (ndofS==0) chisqx = 0.0;
+    chisqy = -1.0;
+    if (ndofK>0) chisqy = chisqK/ndofK;
+    else if (ndofK==0) chisqy = 0.0;
+
+    if (verbose) printf("chisq/ndof = %f/%d = %f, chisqS/ndofS = %f/%d = %f, chisqK/ndofK = %f/%d = %f\n", chisq, ndof, ret, chisqS, ndofS, chisqx, chisqK, ndofK, chisqy);
+
+    return ret;
   }
 
-  Double_t Dx = S1*Szz - Sz*Sz;
-  X0 = (Sx*Szz-Sz*Szx)/Dx;
-  //iDirX = (S1*Szx-Sz*Sx)/Dx; iDirX=-iDirX;
-  mX = (S1*Szx-Sz*Sx)/Dx; //mX=-mX;
-  X0err = sqrt(Szz/Dx);
-  //iDirXerr = sqrt(S1/Dx);
-  mXerr = sqrt(S1/Dx);
-  corrXmX = -Sz/sqrt(Szz*S1);
+  #ifdef USEMINUIT
+  void _fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag) {
 
-  //Fit Y
-  int ny = (int)(vK.size());
-  //          S1=0;   for(int i=0; i<(int)ny; i++) S1  += 1./pow(Cluster::GetNominalResolution(1),2);
-  //          Sz=0;   for(int i=0; i<(int)ny; i++) Sz  += vK.at(i).second.second/pow(Cluster::GetNominalResolution(1),2);
-  //          Szz=0;  for(int i=0; i<(int)ny; i++) Szz += pow(vK.at(i).second.second,2)/pow(Cluster::GetNominalResolution(1),2);
-  // Double_t Sy=0;   for(int i=0; i<(int)ny; i++) Sy  += vK.at(i).second.first/pow(Cluster::GetNominalResolution(1),2);
-  // Double_t Szy=0;  for(int i=0; i<(int)ny; i++) Szy += (vK.at(i).second.first*vK.at(i).second.second)/pow(Cluster::GetNominalResolution(1),2);
-  Double_t Sy=0, Szy=0;
-  for(int i=0; i<(int)ny; i++){ //Why 5 loops when you can do just one... WHY?!?!?!?
-    // printf("SingleFit: cluster %d, Jinf: %d, TDR %d\n", vK.at(i).first, GetCluster(vK.at(i).first)->GetJinf(), GetCluster(vK.at(i).first)->GetTDR());
-    S1  += 1./pow(GetCluster(vK.at(i).first)->GetNominalResolution(1),2);
-    Sz  += vK.at(i).second.second/pow(GetCluster(vK.at(i).first)->GetNominalResolution(1),2);
-    Szz += pow(vK.at(i).second.second,2)/pow(GetCluster(vK.at(i).first)->GetNominalResolution(1),2);
-    Sy  += vK.at(i).second.first/pow(GetCluster(vK.at(i).first)->GetNominalResolution(1),2);
-    Szy += (vK.at(i).second.first*vK.at(i).second.second)/pow(GetCluster(vK.at(i).first)->GetNominalResolution(1),2);
+    std::vector<double> v_chilay;
+
+    f = _compchisq(v_trackS_sf, v_chilay, par[0], par[2], v_trackErrS_sf) + _compchisq(v_trackK_sf, v_chilay, par[1], par[3], v_trackErrK_sf);
+
+    return;
   }
-  Double_t Dy = S1*Szz - Sz*Sz;
-  Y0 = (Sy*Szz-Sz*Szy)/Dy;
-  //iDirY = (S1*Szy-Sz*Sy)/Dy; iDirY=-iDirY;
-  mY = (S1*Szy-Sz*Sy)/Dy; //mY=-mY;
-  Y0err = sqrt(Szz/Dy);
-  //iDirYerr = sqrt(S1/Dy);
-  mYerr = sqrt(S1/Dy);
-  corrYmY = -Sz/sqrt(Szz*S1);
-#endif
+  #endif
 
-  //  printf("%f %f %f %f\n", mX, mY, X0, Y0);
-
-  //    dirX = mX * dirZ                 -->       dirX = mX / sqrt(1 + mX^2 + mY^2)
-  //    dirY = mY * dirZ                 -->       dirX = mY / sqrt(1 + mX^2 + mY^2)
-  //    dirZ = 1./sqrt(1 + mX^2 + mY^2)
-
-  //    ∂dirX/∂mX = +dirZ^3 * (1+mY^2)        ∂dirY/∂mX = -dirZ^3 * mX * mY       ∂dirZ/∂mX = -dirZ^3 * mX
-  //    ∂dirX/∂mY = -dirZ^3 * mX * mY         ∂dirY/∂mY = +dirZ^3 * (1+mX^2)      ∂dirZ/∂mY = -dirZ^3 * mY
-  //    corr(mX,mY)=0  since they come from independent fits
-
-  iDirZ = 1./sqrt(1 + mX*mX + mY*mY);
-  iDirX = mX * iDirZ;
-  iDirY = mY * iDirZ;
-  Double_t dDirXdmX = +iDirZ*iDirZ*iDirZ * (1+mY*mY);
-  Double_t dDirXdmY = -iDirZ*iDirZ*iDirZ * mX * mY;
-  Double_t dDirYdmX = -iDirZ*iDirZ*iDirZ * mX * mY;
-  Double_t dDirYdmY = +iDirZ*iDirZ*iDirZ * (1+mX*mX);
-  Double_t dDirZdmX = -iDirZ*iDirZ*iDirZ * mX;
-  Double_t dDirZdmY = -iDirZ*iDirZ*iDirZ * mY;
-  iDirXerr = sqrt( pow(dDirXdmX * mXerr, 2) + pow(dDirXdmY * mYerr, 2) );
-  iDirYerr = sqrt( pow(dDirYdmX * mXerr, 2) + pow(dDirYdmY * mYerr, 2) );
-  iDirZerr = sqrt( pow(dDirZdmX * mXerr, 2) + pow(dDirZdmY * mYerr, 2) );
-
-  //------------------------------------------------------------------------------------------
-
-  theta = std::acos(iDirZ);
-  phi = std::atan2(iDirY, iDirX);
-
-  //should not happen ------------
-  if (theta<0) {
-    theta = fabs(theta);
-    phi+=TMath::Pi();
-  }
-  if (phi>TMath::Pi()) {
-    phi-=2.0*TMath::Pi();
-  }
-  if (phi<-TMath::Pi()) {
-    phi+=2.0*TMath::Pi();
-  }
-  //------------------------------
-
-  //theta = acos( dirZ )        --> theta(mX,mY) = acos( 1./sqrt(1+mX*mX+mY*mY) )
-  //phi = atan (dirY/dirX)      --> phi(mX,mY)   = atan( mY/mX )
-  //
-  //∂phi/∂mX = -mY / (mX^2 + mY^2)                            ∂phi/∂mY = +mX / (mX^2 + mY^2)
-  //∂theta/∂mX = [(1+mX^2+mY^2)*sqrt(mX^2+mY^2)]^{-1}         ∂theta/∂mY = ∂theta/∂mX
-
-  double dthetadmX = 1./( (1 + mX*mX * mY*mY) * sqrt(mX*mX + mY*mY) );
-  double dthetadmY = 1./( (1 + mX*mX * mY*mY) * sqrt(mX*mX + mY*mY) );
-  double dphidmX   = -mY / (mX*mX + mY*mY);
-  double dphidmY   = +mX / (mX*mX + mY*mY);
-  thetaerr = sqrt( pow(dthetadmX*mXerr,2) + pow(dthetadmY*mYerr,2) );
-  phierr   = sqrt( pow(dphidmX*mXerr,2)   + pow(dphidmY*mYerr,2) );
-
-  //------------------------------------------------------------------------------------------
-
-  int ndofS = vS.size() - 2;
-  int ndofK = vK.size() - 2;
-
-  double chisqS = 0.0;
-  double chisqK = 0.0;
-  double chisq = 0.0;
-
-  if (ndofS>=0) {
-    chisqS = _compchisq(vS, v_chilayS, mX, X0, v_trackErrS_sf);
-    chisq += chisqS;
-  }
-  if (ndofK>=0) {
-    chisqK = _compchisq(vK, v_chilayK, mY, Y0, v_trackErrK_sf);
-    chisq += chisqK;
-  }
-
-  int ndof = ndofS + ndofK;
-  double ret = chisq/ndof;
-  if (ndof<=0) {
-    if (ndofS>0) ret = chisqS/ndofS;
-    else if (ndofK>0) ret = chisqK/ndofK;
-    else if (ndof==0) ret = 0.0;
-    else ret = -1.0;
-  }
-  chisqx = -1.0;
-  if (ndofS>0) chisqx = chisqS/ndofS;
-  else if (ndofS==0) chisqx = 0.0;
-  chisqy = -1.0;
-  if (ndofK>0) chisqy = chisqK/ndofK;
-  else if (ndofK==0) chisqy = 0.0;
-
-  if (verbose) printf("chisq/ndof = %f/%d = %f, chisqS/ndofS = %f/%d = %f, chisqK/ndofK = %f/%d = %f\n", chisq, ndof, ret, chisqS, ndofS, chisqx, chisqK, ndofK, chisqy);
-
-  return ret;
-}
-
-#ifdef USEMINUIT
-void _fcn(Int_t &npar, Double_t *gin, Double_t &f, Double_t *par, Int_t iflag) {
-
-  std::vector<double> v_chilay;
-
-  f = _compchisq(v_trackS_sf, v_chilay, par[0], par[2], v_trackErrS_sf) + _compchisq(v_trackK_sf, v_chilay, par[1], par[3], v_trackErrK_sf);
-
-  return;
-}
-#endif
-
-/*
-double _compchisq(std::vector<std::pair<int, std::pair<double, double> > > vec, std::vector<double>& v_chilay, double imX, double iX, double iXerr, double Z0){
+  /*
+  double _compchisq(std::vector<std::pair<int, std::pair<double, double> > > vec, std::vector<double>& v_chilay, double imX, double iX, double iXerr, double Z0){
 
   v_chilay.clear();
 
@@ -949,12 +949,12 @@ double _compchisq(std::vector<std::pair<int, std::pair<double, double> > > vec, 
   static Double_t delta;
   delta = 0.0;
   for (int pp=0; pp<(int)(vec.size()); pp++) {
-    delta = (vec.at(pp).second.first - _func(vec.at(pp).second.second, imX, iX, Z0))/iXerr;
-    v_chilay.push_back(delta*delta);
-    chisq += delta*delta;
-  }
+  delta = (vec.at(pp).second.first - _func(vec.at(pp).second.second, imX, iX, Z0))/iXerr;
+  v_chilay.push_back(delta*delta);
+  chisq += delta*delta;
+}
 
-  return chisq;
+return chisq;
 }
 */
 
@@ -1151,7 +1151,7 @@ double Event::GetRawSignal_PosNum(int tdrnum, int channel, int Jinfnum){
 }
 
 double Event::GetCN_PosNum(int tdrnum, int va, int Jinfnum){
-  
+
   short int array[1024];
   float arraySoN[1024];
   float pede[1024];
@@ -1195,10 +1195,10 @@ float Event::GetRawSoN(RHClass* rh, int tdrnum, int channel, int Jinfnum) {
 }
 
 double Event::ComputeCN(int size, short int* RawSignal, float* pede, float* RawSoN, double threshold){
-  
+
   double mean=0.0;
   int n=0;
-  
+
   for (int ii=0; ii<size; ii++) {
     if (RawSoN[ii]<threshold) {//to avoid real signal...
       n++;
@@ -1210,11 +1210,11 @@ double Event::ComputeCN(int size, short int* RawSignal, float* pede, float* RawS
     mean/=n;
   }
   else { //let's try again with an higher threshold
-    mean = ComputeCN(size, RawSignal, pede, RawSoN, threshold+1.0);
-  }
-  //  printf("    CN = %f\n", mean);
-  
-  return mean;
+  mean = ComputeCN(size, RawSignal, pede, RawSoN, threshold+1.0);
+}
+//  printf("    CN = %f\n", mean);
+
+return mean;
 }
 
 //-------------------------------------------------------------------------------------
@@ -1232,10 +1232,10 @@ RHClass::RHClass(){
   memset(tdrCmpMap,-1,NTDRS*sizeof(tdrCmpMap[0]));
 
   for (int ii=0;ii<NTDRS;ii++)
-    for (int jj=0;jj<NVAS;jj++){
-      CNMean[ii][jj]=0.;
-      CNSigma[ii][jj]=0.;
-    }
+  for (int jj=0;jj<NVAS;jj++){
+    CNMean[ii][jj]=0.;
+    CNSigma[ii][jj]=0.;
+  }
 }
 
 void RHClass::Print(){
@@ -1244,15 +1244,15 @@ void RHClass::Print(){
   printf("Run: %d Date: %s\n",Run,date);
   printf("# Jinf = %d\n",nJinf);
   for (int ii=0;ii<nJinf;ii++)
-    printf("Jinf Map pos: %d Jinf num: %d\n", ii, JinfMap[ii]);
+  printf("Jinf Map pos: %d Jinf num: %d\n", ii, JinfMap[ii]);
 
   printf("# TDR RAW = %d\n",ntdrRaw);
   for (int ii=0;ii<ntdrRaw;ii++)
-    printf("TDR RAW Map pos: %d tdrnum: %d\n", ii, tdrRawMap[ii]);
+  printf("TDR RAW Map pos: %d tdrnum: %d\n", ii, tdrRawMap[ii]);
 
   printf("# TDR CMP = %d\n",ntdrCmp);
   for (int ii=0;ii<ntdrCmp;ii++)
-    printf("TDR CMP Map pos: %d tdrnum: %d\n", ii, tdrCmpMap[ii]);
+  printf("TDR CMP Map pos: %d tdrnum: %d\n", ii, tdrCmpMap[ii]);
   //   for (int ii=0;ii<NTDRS;ii++){
   //     printf("TDR: %d\n",ii);
   //     for (int jj=0;jj<NVAS;jj++)
@@ -1276,7 +1276,7 @@ int RHClass::FindPos(int tdrnum){
   // }
 
   for (int ii=0; ii<ntdrCmp; ii++)
-    if (tdrCmpMap[ii]==tdrnum) return ii;
+  if (tdrCmpMap[ii]==tdrnum) return ii;
 
   return -1;
 }
@@ -1288,6 +1288,6 @@ int RHClass::FindPosRaw(int tdrnum){
   // }
 
   for (int ii=0;ii<ntdrRaw;ii++)
-    if(tdrRawMap[ii]==tdrnum)  return ii;
+  if(tdrRawMap[ii]==tdrnum)  return ii;
   return -1;
 }

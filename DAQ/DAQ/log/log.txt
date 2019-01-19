@@ -1,0 +1,128 @@
+Fri Jan 18 09:37:12 2019: Program ./TakePCI were called: using a fake Jinj class!
+Fri Jan 18 09:37:12 2019: Using PCI connection
+Fri Jan 18 09:37:12 2019: ERROR: amswire init failed
+Fri Jan 18 09:37:12 2019: ERROR
+Fri Jan 18 09:37:21 2019: Program ./TakeTDRPCI were called: using a fake Jinj and fake Jinf class!
+Fri Jan 18 09:37:21 2019: Using PCI connection
+Fri Jan 18 09:37:21 2019: ERROR: amswire init failed
+Fri Jan 18 09:37:21 2019: ERROR
+Fri Jan 18 09:37:37 2019: Program ./TakeTDREPP were called: using a fake Jinj and fake Jinf class!
+Fri Jan 18 09:37:37 2019: Using EPP connection
+Fri Jan 18 09:37:37 2019: ERROR: amswire init failed
+Fri Jan 18 09:37:37 2019: ERROR
+Fri Jan 18 09:37:58 2019: Program ./TakeTDREPP were called: using a fake Jinj and fake Jinf class!
+Fri Jan 18 09:37:58 2019: Using EPP connection
+Fri Jan 18 09:37:58 2019: ERROR: amswire init failed
+Fri Jan 18 09:37:58 2019: ERROR
+Fri Jan 18 09:38:02 2019: Program ./TakeTDRPCI were called: using a fake Jinj and fake Jinf class!
+Fri Jan 18 09:38:02 2019: Using PCI connection
+Fri Jan 18 09:38:02 2019: JINJ program: 0x2902
+Fri Jan 18 09:38:02 2019: TDR program: 0x3e43
+Fri Jan 18 09:38:02 2019: JINF program: 0x3a42
+Fri Jan 18 09:38:02 2019: TDR program: 0x3e43
+Fri Jan 18 09:38:02 2019: JINF program: 0x3a42
+Fri Jan 18 09:38:02 2019: WRITE 0 0
+Fri Jan 18 09:38:03 2019: There's no JLV1 card and no NI-USB! A manual trigger will be used...
+Fri Jan 18 09:38:03 2019: TriggerOff...
+Fri Jan 18 09:38:03 2019: Please turn OFF the trigger production and then press RETURN!
+Fri Jan 18 09:38:13 2019: Main: setting delay to 5000 ns ...
+Fri Jan 18 09:39:56 2019: Program ./TakePCI were called: using a fake Jinj class!
+Fri Jan 18 09:39:56 2019: Using PCI connection
+Fri Jan 18 09:39:56 2019: Creating a fake Jinj (using the first Jinf found in Jinj configuration file)!
+Fri Jan 18 09:39:56 2019: JINJ program: 0x2902
+Fri Jan 18 09:39:56 2019: TDR program: 0x3e43
+Fri Jan 18 09:39:56 2019: JINF program: 0x3a42
+Fri Jan 18 09:39:56 2019: TDR program: 0x3e43
+Fri Jan 18 09:39:56 2019: JINF program: 0x3a42
+Fri Jan 18 09:39:56 2019: WRITE 0 0
+Fri Jan 18 09:39:56 2019: There's no JLV1 card and no NI-USB! A manual trigger will be used...
+Fri Jan 18 09:39:56 2019: TriggerOff...
+Fri Jan 18 09:39:56 2019: Please turn OFF the trigger production and then press RETURN!
+Fri Jan 18 09:39:58 2019: Main: setting delay to 5000 ns ...
+Fri Jan 18 09:40:10 2019: Program ./TakeJPCI were called: assuming the presence of a Jinj!
+Fri Jan 18 09:40:10 2019: Using PCI connection
+Fri Jan 18 09:40:10 2019: JINJ program: 0x2902
+Fri Jan 18 09:40:10 2019: TDR program: 0x3e43
+Fri Jan 18 09:40:10 2019: JINF program: 0x3a42
+Fri Jan 18 09:40:10 2019: TDR program: 0x3e43
+Fri Jan 18 09:40:10 2019: JINF program: 0x3a42
+Fri Jan 18 09:40:10 2019: WRITE 0 0
+Fri Jan 18 09:40:10 2019: There's no JLV1 card and no NI-USB! A manual trigger will be used...
+Fri Jan 18 09:40:10 2019: TriggerOff...
+Fri Jan 18 09:40:10 2019: Please turn OFF the trigger production and then press RETURN!
+Fri Jan 18 09:40:10 2019: Main: setting delay to 5000 ns ...
+Fri Jan 18 09:40:16 2019: Program ./TakeTDRPCI were called: using a fake Jinj and fake Jinf class!
+Fri Jan 18 09:40:16 2019: Using PCI connection
+Fri Jan 18 09:40:16 2019: JINJ program: 0x2902
+Fri Jan 18 09:40:16 2019: TDR program: 0x3e43
+Fri Jan 18 09:40:16 2019: JINF program: 0x3a42
+Fri Jan 18 09:40:16 2019: TDR program: 0x3e43
+Fri Jan 18 09:40:16 2019: JINF program: 0x3a42
+Fri Jan 18 09:40:16 2019: WRITE 0 0
+Fri Jan 18 09:40:16 2019: There's no JLV1 card and no NI-USB! A manual trigger will be used...
+Fri Jan 18 09:40:16 2019: TriggerOff...
+Fri Jan 18 09:40:16 2019: Please turn OFF the trigger production and then press RETURN!
+Fri Jan 18 09:40:17 2019: Main: setting delay to 5000 ns ...
+Fri Jan 18 09:44:42 2019: Program ./TakePCI were called: using a fake Jinj class!
+Fri Jan 18 09:44:42 2019: Using PCI connection
+Fri Jan 18 09:44:42 2019: Creating a fake Jinj (using the first Jinf found in Jinj configuration file)!
+Fri Jan 18 09:44:42 2019: JINJ program: 0x2902
+Fri Jan 18 09:44:42 2019: TDR program: 0x3e43
+Fri Jan 18 09:44:42 2019: JINF program: 0x3a42
+Fri Jan 18 09:44:42 2019: TDR program: 0x3e43
+Fri Jan 18 09:44:42 2019: JINF program: 0x3a42
+Fri Jan 18 09:44:42 2019: WRITE 0 0
+Fri Jan 18 09:44:43 2019: There's no JLV1 card and no NI-USB! A manual trigger will be used...
+Fri Jan 18 09:44:43 2019: TriggerOff...
+Fri Jan 18 09:44:43 2019: Please turn OFF the trigger production and then press RETURN!
+Fri Jan 18 09:44:43 2019: Main: setting delay to 5000 ns ...
+Fri Jan 18 09:44:47 2019: Program ./TakeTDRPCI were called: using a fake Jinj and fake Jinf class!
+Fri Jan 18 09:44:47 2019: Using PCI connection
+Fri Jan 18 09:44:47 2019: JINJ program: 0x2902
+Fri Jan 18 09:44:47 2019: TDR program: 0x3e43
+Fri Jan 18 09:44:47 2019: JINF program: 0x3a42
+Fri Jan 18 09:44:47 2019: TDR program: 0x3e43
+Fri Jan 18 09:44:47 2019: JINF program: 0x3a42
+Fri Jan 18 09:44:47 2019: WRITE 0 0
+Fri Jan 18 09:44:48 2019: There's no JLV1 card and no NI-USB! A manual trigger will be used...
+Fri Jan 18 09:44:48 2019: TriggerOff...
+Fri Jan 18 09:44:48 2019: Please turn OFF the trigger production and then press RETURN!
+Fri Jan 18 10:05:36 2019: Program ./TakePCI were called: using a fake Jinj class!
+Fri Jan 18 10:05:36 2019: Using PCI connection
+Fri Jan 18 10:05:36 2019: Creating a fake Jinj (using the first Jinf found in Jinj configuration file)!
+Fri Jan 18 10:05:36 2019: JINJ program: 0x2902
+Fri Jan 18 10:05:36 2019: TDR program: 0x3e43
+Fri Jan 18 10:05:36 2019: JINF program: 0x3a42
+Fri Jan 18 10:05:36 2019: TDR program: 0x3e43
+Fri Jan 18 10:05:36 2019: JINF program: 0x3a42
+Fri Jan 18 10:05:36 2019: WRITE 0 0
+Fri Jan 18 10:05:36 2019: There's no JLV1 card and no NI-USB! A manual trigger will be used...
+Fri Jan 18 10:05:36 2019: TriggerOff...
+Fri Jan 18 10:05:36 2019: Please turn OFF the trigger production and then press RETURN!
+Fri Jan 18 10:05:38 2019: Main: setting delay to 5000 ns ...
+Fri Jan 18 10:05:46 2019: Program ./TakeTDRPCI were called: using a fake Jinj and fake Jinf class!
+Fri Jan 18 10:05:46 2019: Using PCI connection
+Fri Jan 18 10:05:46 2019: JINJ program: 0x2902
+Fri Jan 18 10:05:46 2019: TDR program: 0x3e43
+Fri Jan 18 10:05:46 2019: JINF program: 0x3a42
+Fri Jan 18 10:05:46 2019: TDR program: 0x3e43
+Fri Jan 18 10:05:46 2019: JINF program: 0x3a42
+Fri Jan 18 10:05:46 2019: WRITE 0 0
+Fri Jan 18 10:05:46 2019: There's no JLV1 card and no NI-USB! A manual trigger will be used...
+Fri Jan 18 10:05:46 2019: TriggerOff...
+Fri Jan 18 10:05:46 2019: Please turn OFF the trigger production and then press RETURN!
+Fri Jan 18 10:05:50 2019: booting JINJ at address 0xFFFF with program 0x902 
+Fri Jan 18 10:07:22 2019: Program ./TakeTDRPCI were called: using a fake Jinj and fake Jinf class!
+Fri Jan 18 10:07:22 2019: Using PCI connection
+Fri Jan 18 10:07:22 2019: Creating a fake Jinj (using the first Jinf found in Jinj configuration file)!
+Fri Jan 18 10:07:22 2019: JINJ program: 0x2902
+Fri Jan 18 10:07:22 2019: TDR program: 0x3e43
+Fri Jan 18 10:07:22 2019: JINF program: 0x3a42
+Fri Jan 18 10:07:22 2019: TDR program: 0x3e43
+Fri Jan 18 10:07:22 2019: JINF program: 0x3a42
+Fri Jan 18 10:07:22 2019: WRITE 0 0
+Fri Jan 18 10:07:23 2019: There's no JLV1 card and no NI-USB! A manual trigger will be used...
+Fri Jan 18 10:07:23 2019: TriggerOff...
+Fri Jan 18 10:07:23 2019: Please turn OFF the trigger production and then press RETURN!
+Fri Jan 18 10:07:27 2019: PCI rxdone = 0
+Fri Jan 18 10:07:27 2019: booting JINF at address 0xFFFF with program 0xa42

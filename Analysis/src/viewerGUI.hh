@@ -31,5 +31,5 @@ public:
   virtual ~MyMainFrame();
   void DoDraw();
   void DoOpen();
-//  ClassDef(MyMainFrame, 0)
+  //  ClassDef(MyMainFrame, 0)
 };

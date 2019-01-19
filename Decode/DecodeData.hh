@@ -27,7 +27,7 @@ struct header {			//for file writing NOT in AMSBlock
 #pragma pack(pop)
 
 class DecodeData {
-  
+
 private:
   FILE* rawfile;
   char rawname[300];
@@ -56,11 +56,11 @@ private:
   void mysort(int* aa,int nel);
 
   bool kMC;
-  
+
 public:
   Event * ev;
   RHClass *rh;
-  
+
   int evenum;
   TH1F* hocc[NJINF*NTDRS];
   TH1F* hoccseed[NJINF*NTDRS];
@@ -77,9 +77,9 @@ public:
 
   bool kClusterize;
   int cworkaround;
-  
+
   void DumpRunHeader();
-  
+
 public:
   DecodeData(char * ifname, char* caldir, int run, int ancillary, bool _kMC=false);
   ~DecodeData();
@@ -94,7 +94,7 @@ public:
   int GetNTDRCmp() { return ntdrCmp;}
   int GetIdTDRRaw(int pos);
   int GetIdTDRCmp(int pos);
-  
+
   int SkipOneEvent(int evskip=1);
   int ReadOneEvent();
 
@@ -108,12 +108,12 @@ public:
   int ReadOneTDR(int jinf=0);
   int ReadOneJINF();
   int SkipOneEvent_data(int evskip=1);
-  
+
   //mc
   void OpenFile_mc(char* ifname, char* caldir, int run, int ancillary);
   int ReadOneEvent_mc();
   int SkipOneEvent_mc(int evskip=1);
-  
+
   void SetPrintOff(){pri=0;}
   void SetPrintOn(){pri=1;}
   void SetEvPrintOff(){evpri=0;}

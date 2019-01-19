@@ -2,7 +2,7 @@
 #include <sys/stat.h>
 #include "dampe.h"
 #include "PUtil.h"
-c_dampe::c_dampe(char *name, char *conf_file, int address, AMSWcom *node_in):JinjSlave(name, conf_file, address, node_in){
+c_dampe::c_dampe(char *name, char *conf_file, int address, AMSWcom *node_in,int flagfake):JinjSlave(name, conf_file, address, node_in,flagfake){
 	strcpy(myname, name);
 	mask.Nmask = 0;
 	selfaddress = address;
@@ -116,7 +116,7 @@ char* c_dampe::PrintAllEventNumber(int log,int JLV1num) {
 	int ret=0;
 	static char numbers[1023]="";
 	// snprintf(numbers, 1023, "Dampe %02d: %6d", selfaddress, 0);
-	// printf("[>>>>>] dampe: %s\n", numbers); 
+	// printf("[>>>>>] dampe: %s\n", numbers);
 	return numbers;
 }
 
@@ -126,4 +126,3 @@ int c_dampe::EventReset() {
 	// printf("[>>>>>] resetting events (reinitialize)\n");
 	return 0;
 }
-

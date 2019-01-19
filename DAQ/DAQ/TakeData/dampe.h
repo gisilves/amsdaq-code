@@ -14,7 +14,7 @@ class c_dampe: public JinjSlave{
 private:
 	int client_socket;
 public:
-	c_dampe(char* name,char* conf_file,int address,AMSWcom* node);
+	c_dampe(char* name,char* conf_file,int address,AMSWcom* node, int flagfake);
 	~c_dampe();
 private:
 	int client_connect(const char *address, const char *port);

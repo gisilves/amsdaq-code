@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <sstream>
-
+#include <unistd.h>
 //Definition of AMSWcom class
 #include "amswcom.h"
 

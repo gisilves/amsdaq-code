@@ -40,7 +40,7 @@ int main(int argc,char** argv){
   double klowthreshold=1.0;
 
   bool kMC=false;
-  
+
   bool kClusterize=false;
   int cworkaround=0;
 
@@ -102,7 +102,7 @@ int main(int argc,char** argv){
   opt->setOption("klowthreshold");
   opt->setOption("cworkaround");
   opt->setOption("events");
-  
+
   //****************
   //Get Line Command
   //****************
@@ -123,18 +123,18 @@ int main(int argc,char** argv){
   if (opt->getFlag("montecarlo") || opt->getFlag('m')){
     kMC = true;
   }
-  
+
   //*********
   //Get Options
   //*********
   if (opt->getValue("rawdata")) {
     sprintf(DirRaw,"%s/", opt->getValue("rawdata"));
   }
-  
+
   if (opt->getValue("caldata")) {
     sprintf(DirCal,"%s/", opt->getValue("caldata"));
   }
-  
+
   if (opt->getValue("rootdata")) {
     sprintf(DirRoot,"%s/", opt->getValue("rootdata"));
   }
@@ -158,12 +158,12 @@ int main(int argc,char** argv){
   if (opt->getValue("cworkaround")) {
     cworkaround = atoi(opt->getValue("cworkaround"));
   }
-  
+
   //  eventstoprocess
   if (opt->getValue("events")) {
     eventstoprocess  = atoi(opt->getValue("events"));
   }
-  
+
   //  printf("%d %f %f %f %f\n", kClusterize, shighthreshold, slowthreshold, khighthreshold, klowthreshold);
 
   //*************
@@ -172,17 +172,17 @@ int main(int argc,char** argv){
 
   switch(opt->getArgc()){
 
-  case 1:
+    case 1:
     run = atoi(opt->getArgv(0));
     ancillary = -1;
     break;
 
-  case 2:
+    case 2:
     run = atoi(opt->getArgv(0));
     ancillary = atoi(opt->getArgv(1));
     break;
-    
-  default:
+
+    default:
     opt->printUsage();
     exit(-1);
     break;
@@ -195,16 +195,16 @@ int main(int argc,char** argv){
   printf("Writing output in %s\n", DirRoot);
 
   if (ancillary < 0)
-    sprintf(filename,"%s/run_%06d.root", DirRoot, run);
+  sprintf(filename,"%s/run_%06d.root", DirRoot, run);
   else
-    sprintf(filename,"%s/run_%06d_ANC_%d.root", DirRoot, run, ancillary);
+  sprintf(filename,"%s/run_%06d_ANC_%d.root", DirRoot, run, ancillary);
   sprintf(pdf_filename, "%s.pdf", filename);
 
   //  int complevel=ROOT::CompressionSettings(ROOT::kLZMA, 2);
   int complevel=ROOT::CompressionSettings(ROOT::kZLIB, 2);
   printf("The choosen compression level is %d\n", complevel);
   TFile* foutput = new TFile(filename, "RECREATE", "File with the event tree", complevel);
-  
+
   DecodeData *dd1= new DecodeData(DirRaw, DirCal, run, ancillary, kMC);
 
   dd1->shighthreshold=shighthreshold;
@@ -213,7 +213,7 @@ int main(int argc,char** argv){
   dd1->klowthreshold=klowthreshold;
   dd1->kClusterize=kClusterize;
   dd1->cworkaround=cworkaround;
-  
+
   dd1->SetPrintOff();
   dd1->SetEvPrintOff();
 
@@ -224,7 +224,7 @@ int main(int argc,char** argv){
   // for (int ii=0; ii<dd1->GetNTDRCmp(); ii++) {
   //   printf("%d) %d\n", ii, dd1->GetIdTDRCmp(ii));
   // }
-  
+
   TTree* t4= new TTree("t4","My cluster tree");
   t4->Branch("cluster_branch","Event",&(dd1->ev),32000,2);
   double chaK[24];
@@ -258,21 +258,21 @@ int main(int argc,char** argv){
     TBranch* branch = (TBranch*)(obj->At(ii));
     branch->SetCompressionLevel(6);
   }
-    
+
   int ret1=0;
   while (1) {
 
     if(eventstoprocess!=-1 && processed==eventstoprocess) break;
-    
-    ret1=dd1->EndOfFile();    
+
+    ret1=dd1->EndOfFile();
     if (ret1) break;
-    
+
     ret1=dd1->ReadOneEvent();
     //    printf("%d\n", ret1);
-    
-    ret1=dd1->EndOfFile();    
+
+    ret1=dd1->EndOfFile();
     if (ret1) break;
-    
+
     if (ret1==0) {
       processed++;
       //      printf("This event has %d clusters\n", (dd1->ev)->GetNClusTot());
@@ -281,26 +281,26 @@ int main(int argc,char** argv){
       memset(sigK, 0, 24*sizeof(sigK[0]));
       memset(sigS, 0, 24*sizeof(sigS[0]));
       for (int cc=0; cc<(dd1->ev)->GetNClusTot(); cc++) {
-	Cluster* cl = (dd1->ev)->GetCluster(cc);
-	int ladder = cl->ladder;
-	//	printf("%d\n", ladder);
-	double signal = cl->GetTotSig();
-	double charge = cl->GetCharge();
-	double son = cl->GetTotSN();
-	if (cl->side==1) {
-	  if (charge>chaK[ladder]) {
-	    chaK[ladder]=charge;
-	    sigK[ladder]=signal;
-	    sonK[ladder]=son;
-	  }
-	}
-	else{
-	  if (charge>chaS[ladder]) {
-	    chaS[ladder]=charge;
-	    sigS[ladder]=signal;
-	    sonS[ladder]=son;
-	  }
-	}	
+        Cluster* cl = (dd1->ev)->GetCluster(cc);
+        int ladder = cl->ladder;
+        //	printf("%d\n", ladder);
+        double signal = cl->GetTotSig();
+        double charge = cl->GetCharge();
+        double son = cl->GetTotSN();
+        if (cl->side==1) {
+          if (charge>chaK[ladder]) {
+            chaK[ladder]=charge;
+            sigK[ladder]=signal;
+            sonK[ladder]=son;
+          }
+        }
+        else{
+          if (charge>chaS[ladder]) {
+            chaS[ladder]=charge;
+            sigS[ladder]=signal;
+            sonS[ladder]=son;
+          }
+        }
       }
       //      printf("%f %f %f %f %f %f\n", sigS[0], sigK[0], sigS[1], sigK[1], sigS[4], sigK[4]);
       t4->Fill();
@@ -325,7 +325,7 @@ int main(int argc,char** argv){
   }
 
   CreatePdfWithPlots(dd1, pdf_filename);
-    
+
   t4->Write("",TObject::kOverwrite);
 
   printf("\nProcessed %5d  Events\n",processed+readfailed+jinffailed);
@@ -334,14 +334,14 @@ int main(int argc,char** argv){
   printf("Rejected  %5d  Events --> Jinf/Jinj Error\n",jinffailed);
 
   delete dd1;
-  
+
   foutput->Write("",TObject::kOverwrite);
   foutput->Close("R");
 
   return 0;
 }
 
-void PlotsWithFits(TH1* histo, char* name, char* title, char* pdf_filename) {  
+void PlotsWithFits(TH1* histo, char* name, char* title, char* pdf_filename) {
 
   static bool first=true;
   char local_pdf_filename[255];
@@ -421,21 +421,21 @@ void CreatePdfWithPlots(DecodeData* dd1, char* pdf_filename){
   for (int jj=0; jj<NJINF; jj++){
     for (int hh = 0; hh < NTDRS; hh++) {
       for (int ss = 0; ss < 2; ss++) {
-	TCanvas* canvas = new TCanvas("dummy", "dummy", 1024, 1024);
-	canvas->SetLogy(true);
-	dd1->hsignal[jj*NTDRS+hh][ss]->Draw();
-	int entries = (int)(dd1->hsignal[NTDRS*jj+hh][ss]->GetEntries());
-	if (entries>=1) {
-	  double mean = (dd1->hsignal[NTDRS*jj+hh][ss]->GetMean());
-	  double rms = (dd1->hsignal[NTDRS*jj+hh][ss]->GetRMS());
-	  //	  printf("%f %f\n", mean, rms);
-	  (dd1->hsignal[NTDRS*jj+hh][ss])->GetXaxis()->SetRangeUser(mean-5.0*rms, mean+9.0*rms);
-	  canvas->Update();
-	  canvas->Modified();
-	  canvas->Update();
-	  canvas->Print(pdf_filename, "pdf");
-	}
-	delete canvas;
+        TCanvas* canvas = new TCanvas("dummy", "dummy", 1024, 1024);
+        canvas->SetLogy(true);
+        dd1->hsignal[jj*NTDRS+hh][ss]->Draw();
+        int entries = (int)(dd1->hsignal[NTDRS*jj+hh][ss]->GetEntries());
+        if (entries>=1) {
+          double mean = (dd1->hsignal[NTDRS*jj+hh][ss]->GetMean());
+          double rms = (dd1->hsignal[NTDRS*jj+hh][ss]->GetRMS());
+          //	  printf("%f %f\n", mean, rms);
+          (dd1->hsignal[NTDRS*jj+hh][ss])->GetXaxis()->SetRangeUser(mean-5.0*rms, mean+9.0*rms);
+          canvas->Update();
+          canvas->Modified();
+          canvas->Update();
+          canvas->Print(pdf_filename, "pdf");
+        }
+        delete canvas;
       }
     }
   }
@@ -443,21 +443,21 @@ void CreatePdfWithPlots(DecodeData* dd1, char* pdf_filename){
   for (int jj=0; jj<NJINF; jj++){
     for (int hh = 0; hh < NTDRS; hh++) {
       for (int ss = 0; ss < 2; ss++) {
-	TCanvas* canvas = new TCanvas("dummy", "dummy", 1024, 1024);
-	canvas->SetLogy(true);
-	dd1->hson[jj*NTDRS+hh][ss]->Draw();
-	int entries = (int)(dd1->hson[NTDRS*jj+hh][ss]->GetEntries());
-	if (entries>=1) {
-	  double mean = (dd1->hson[NTDRS*jj+hh][ss]->GetMean());
-	  double rms = (dd1->hson[NTDRS*jj+hh][ss]->GetRMS());
-	  //	  printf("%f %f\n", mean, rms);
-	  (dd1->hson[NTDRS*jj+hh][ss])->GetXaxis()->SetRangeUser(0.0, mean+7.0*rms);
-	  canvas->Update();
-	  canvas->Modified();
-	  canvas->Update();
-	  canvas->Print(pdf_filename, "pdf");
-	}
-	delete canvas;
+        TCanvas* canvas = new TCanvas("dummy", "dummy", 1024, 1024);
+        canvas->SetLogy(true);
+        dd1->hson[jj*NTDRS+hh][ss]->Draw();
+        int entries = (int)(dd1->hson[NTDRS*jj+hh][ss]->GetEntries());
+        if (entries>=1) {
+          double mean = (dd1->hson[NTDRS*jj+hh][ss]->GetMean());
+          double rms = (dd1->hson[NTDRS*jj+hh][ss]->GetRMS());
+          //	  printf("%f %f\n", mean, rms);
+          (dd1->hson[NTDRS*jj+hh][ss])->GetXaxis()->SetRangeUser(0.0, mean+7.0*rms);
+          canvas->Update();
+          canvas->Modified();
+          canvas->Update();
+          canvas->Print(pdf_filename, "pdf");
+        }
+        delete canvas;
       }
     }
   }
@@ -465,7 +465,7 @@ void CreatePdfWithPlots(DecodeData* dd1, char* pdf_filename){
   TCanvas* c_exit = new TCanvas("dummy", "dummy", 1024, 1024);
   snprintf(local_pdf_filename, 255, "%s]", pdf_filename);
   c_exit->Print(local_pdf_filename, "pdf");
-  delete c_exit; 
+  delete c_exit;
 
   return;
 }

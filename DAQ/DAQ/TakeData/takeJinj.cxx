@@ -10,6 +10,7 @@
 #include <math.h>
 #include <sys/time.h>
 #include <TDatime.h>
+#include <unistd.h>
 //------------------------
 #include "TrigClass.h"
 #include "PUtil.h"
@@ -62,7 +63,7 @@ struct wholeheader {//for file writing in ASMBlock
 	unsigned short JMDCRRRWNODETYPE;
 
 	unsigned short RUNNUMMSB;
-	unsigned short RUNNUMLSB;	
+	unsigned short RUNNUMLSB;
 	unsigned short RUNTAGMSB;
 	unsigned short RUNTAGLSB;
 	unsigned short EVTNUMMSB;
@@ -76,7 +77,7 @@ struct wholeheader {//for file writing in ASMBlock
 	unsigned short DSPSIZE;
 	unsigned short DSPRRRWNODETYPE;
 
-	//	unsigned short DSPCRC16;//Not in struct because it must be wrote after data flow 
+	//	unsigned short DSPCRC16;//Not in struct because it must be wrote after data flow
 };
 
 int StartUp(AMSWcom *node);
@@ -105,20 +106,20 @@ int main(int argc, char **argv) {
   char logfilename[255];
   char shortlogfilename[255];
   char LOGPATH[255]="./log/";
-  bool FakeFlag=0;//0 means there's a Jinj, if 1 a fake Jinj class will be used (it depends on the program name used [J->Jinj]) 
-  
+  int FakeFlag=0;//0 means there's a Jinj, if 1 a fake Jinj class will be used (it depends on the program name used [J->Jinj])
+
   if (argc<3) {
     ShowHelp(argv[0]);
     return 1;
   }
-  
+
   //openlogfile
   sprintf(logfilename,"%s/log.txt",LOGPATH);
   logfile=fopen(logfilename,"a"); //append mode
   if (logfile==NULL) {
     printf("ERROR: file %s could not be created, perhaps the log dir doesn't exist ?\n",logfilename);
     ret=1;
-    printf("%s\n",(ret)?"ERROR":"READY"); 
+    printf("%s\n",(ret)?"ERROR":"READY");
     return 0;
   }
   sprintf(shortlogfilename,"%s/shortlog.txt",LOGPATH);
@@ -126,33 +127,35 @@ int main(int argc, char **argv) {
   if (shortlogfile==NULL) {
     printf("ERROR: file %s could not be created, perhaps the log dir doesn't exist ?\n",shortlogfilename);
     ret=1;
-    printf("%s\n",(ret)?"ERROR":"READY"); 
+    printf("%s\n",(ret)?"ERROR":"READY");
     return 0;
   }
-  
+
   if (strstr(argv[0],"J")) {
     PRINTF("Program %s were called: assuming the presence of a Jinj!\n", argv[0]);
     FakeFlag=0;
   }
-  else {
+  else if(strstr(argv[0],"TDR")){
+    PRINTF("Program %s were called: using a fake Jinj and fake Jinf class!\n", argv[0]);
+    FakeFlag=2;
+  }else {
     PRINTF("Program %s were called: using a fake Jinj class!\n", argv[0]);
     FakeFlag=1;
-  }
-  
+	}
   //create the AMSwire comunication class
   AMSWcom *Main=new AMSWcom();
-  
+
   //Set the PC inteface to AMSwire PCI or EPP
   Main->SetHW((strstr(argv[0],"EPP"))?kAMSW_EPP:kAMSW_PCI);//if the program's name contain "EPP" the communication is over EPP, otherwise PCI
   if (Main->GetHW()==kAMSW_PCI){
     atexit(PreExit);
   }
-  
+
   if (strstr(argv[0],"EPP")) {
     PRINTF("Using EPP connection\n");
   }
   else PRINTF("Using PCI connection\n");
-  
+
   //set the port to talk to
   Main->SetPort(atoi(argv[1]));
   // set the class to non interactive behaviour
@@ -161,7 +164,7 @@ int main(int argc, char **argv) {
   if (Main->Init()==ERROR) {
     PRINTF("ERROR: amswire init failed\n");
     ret=1;
-    PRINTF("%s\n",(ret)?"ERROR":"READY"); 
+    PRINTF("%s\n",(ret)?"ERROR":"READY");
     //   TERMINATE
     fclose(logfile);
     fclose(shortlogfile);
@@ -170,10 +173,10 @@ int main(int argc, char **argv) {
   }
   //set the time out
   Main->SetTimeOut(10000);
-  
+
   //create a new JINJ object
   JJ= new Jinj("JINJ", "JINJ.conf", 0xffff, Main, FakeFlag);
-  
+
   //create Trigger Object
   JLV1* Jlv1 = JJ->GetJLV1Pointer();
   if (Jlv1) {
@@ -194,15 +197,17 @@ int main(int argc, char **argv) {
     }
     trig->TriggerOff();
   }
-  
+
   TDatime *StartProgTime=new TDatime();//there's was in an old version of this DAQ software (maybe is needed only by the "standard" file writing and not when writing in AMSBlock)
-  
-  ret=JJ->SetDelay();
-  printf("SetDelay results in %d\n", ret);
-  if (ret) {
-    PRINTF("%s\n","ERROR");
-    return 0;
-  }
+
+	if(FakeFlag!=2){
+  	ret=JJ->SetDelay();
+  	printf("SetDelay results in %d\n", ret);
+  	if (ret) {
+    	PRINTF("%s\n","ERROR");
+    	return 0;
+  	}
+	}
   //-------------------------------------------------
   //              COMMANDS
   //-------------------------------------------------
@@ -228,7 +233,7 @@ int main(int argc, char **argv) {
       ret=1;
       ShowHelp(argv[0]);
     }
-    else ret=SaveCalibration(Main, atoi(argv[3])); 
+    else ret=SaveCalibration(Main, atoi(argv[3]));
   }
   else if (!strcmp(argv[2],"GETEVTNUM")) {
     int tcount=trig->ReadCounter();
@@ -243,7 +248,7 @@ int main(int argc, char **argv) {
   else if (!strcmp(argv[2],"TAKEDATA")) {
     if (argc==3) ret=StartRun(Main);
     else if (argc==4) ret=StartRun(Main, atoi(argv[3]));
-    else if (argc>4) ret=StartRun(Main, atoi(argv[3]), atoi(argv[4]));  
+    else if (argc>4) ret=StartRun(Main, atoi(argv[3]), atoi(argv[4]));
   }
   else if (!strcmp(argv[2],"COMPLETERUN")) {
     if (argc==3) {
@@ -262,7 +267,7 @@ int main(int argc, char **argv) {
     }
     else {
       daq=0;
-      step= atoi(argv[3]);//this is the distance number between two trigger displayed 
+      step= atoi(argv[3]);//this is the distance number between two trigger displayed
       StartRun(Main);
     }
   }
@@ -279,9 +284,9 @@ int main(int argc, char **argv) {
   }
 
   JJ->SetModeSlaves(0, 0);
-  
+
   PRINTF("%s\n",(ret)?"ERROR":"READY");
-  
+
   //   TERMINATE
   fclose(logfile);
   fclose(shortlogfile);
@@ -315,28 +320,28 @@ void PreExit() {
 
 int StartUp(AMSWcom* node){
   int ret=0;
-  
+
   SLPRINTF("INIT\n");
 
   ret=JJ->SelfInit();
   if(ret) return ret;
-  
+
   JLV1* Jlv1 = JJ->GetJLV1Pointer();
-  
+
   if (Jlv1) Jlv1->Init();
-  
+
   ////if(trig->TriggerOff()) return 1;
   TESTRXDONE(node);
-  
+
   ret=JJ->InitJinfs();
   if(ret) return ret;
 
   ret=JJ->SetDelay();//Set Jinfs delays
   if(ret) return ret;
-  
+
   ret=JJ->EventReset();
   if(ret) return ret;
-  
+
   return ret;
 }
 
@@ -373,7 +378,7 @@ int Calibrate(AMSWcom* node) {
   if (ret) return ret;
   ret=JJ->EventReset();
   printf("EventReset()\n");
-  if (ret) return ret;  
+  if (ret) return ret;
 
   for (int ii=0;ii<NSLAVE;ii++) {
     if((JJ->CPars->refmask&(1<<ii)) && strstr(JJ->CPars->SlaveConfFile[ii],"JINF")) {
@@ -496,7 +501,7 @@ int SaveCalibration(AMSWcom* node, int runnum){
   Head.RUNTAGLSB=Head.RUNNUMLSB;
 
   if (WritingMode==0){
-    //AMSBlock writing file mode  
+    //AMSBlock writing file mode
     //----------------opening data file for writing-----------------
     char datafilename[255];
     sprintf(datafilename,"%s/%d.dat", JJ->CPars->CALPATH, runnum);
@@ -557,7 +562,7 @@ int SaveCalibration(AMSWcom* node, int runnum){
 	    Head.EVTNUMMSB=tdrnum>>16;//	EVTNUM is the sequence number of TDR'request
 	    Head.EVTNUMMSB=tdrnum&0xffff;//	EVTNUM is the sequence number of TDR'request
 
-	    PRINTF("EVTNUM = %d \n",tdrnum);//only for debug					
+	    PRINTF("EVTNUM = %d \n",tdrnum);//only for debug
 	    tdrnum++;
 	    Head.DSPRRRWNODETYPE=DSPNT+((offset+jj)<<5); //come node deve avere il numero del tdr + un offset (cioè tipo da 450 a 473...)
 
@@ -568,12 +573,12 @@ int SaveCalibration(AMSWcom* node, int runnum){
 	}
       }
     }
-    
+
     fclose(datafile);
-    
+
     PRINTF("Calibration %d saved in %s\n", runnum, datafilename);
   }
-  
+
   else if(WritingMode==1){
     for (int ii=0;ii<NSLAVE;ii++) {
       if((JJ->CPars->refmask&(1<<ii)) && strstr(JJ->CPars->SlaveConfFile[ii],"JINF")) {
@@ -583,7 +588,7 @@ int SaveCalibration(AMSWcom* node, int runnum){
       }
     }
   }
-  
+
   return ret;
 }
 
@@ -625,7 +630,7 @@ int EventReset(AMSWcom *node) {
 }
 
 void StopRun(int dum) {
-  
+
   // 	printf("StopRun(%d): %d \n", dum, eventsinbuffer);/only for debug
 
   if (eventsinbuffer==MAXEVENTSINBUFFER){
@@ -635,12 +640,12 @@ void StopRun(int dum) {
     ControlOn=0;
     //  	printf("I'm stopping the data taking: %d\n",ControlOn);//only for debug
   }
-  
+
   eventsinbuffer=eventsinbuffer-1;
 
-  
+
   //	printf("StopRun(%d): %d \n", dum, eventsinbuffer);//only for debug
-  
+
   return;
 }
 
@@ -654,15 +659,15 @@ void PrintNumbers(int dum) {
 
 //=========================================================================================================
 int StartRun(AMSWcom *node, int nevents, int fake) {
-  
+
   int ret = 0, runnum = time(NULL);
-  
+
   for (int ii=0; ii < JJ->NSlave; ii++) {
     JinjSlave *slave = JJ->GetSlavePointer(ii);
     slave->timestamp = runnum;
     snprintf(slave->myaction, 20, "data");
   }
-  
+
   int ancillary_code;
   FILE *stream;
   ancillary_code = 0;
@@ -683,22 +688,22 @@ int StartRun(AMSWcom *node, int nevents, int fake) {
   }
   else
     printf("404 - Ancillary's configuration file missing\n");
-  
+
   if(trig->TriggerOff()) return 1;
   TESTRXDONE(node);
-  
+
   if (!nevents) nevents=-1;
-  
+
   ControlOn=1;//if 1 we take data (we're in loop), when becames != 1 (e.g. 0) the system exit from the loop
-  
+
   signal(SIGTERM,StopRun);//killing the PID of the process we call the function StopRun that stop the taking of data in the right way (the param send to StopRun is SIGTERM itself and we need that StopRun accepts a param even if cannot use it)
-  signal(SIGINT,StopRun);// sending 'CTRL_C' the program exits in the right way 
+  signal(SIGINT,StopRun);// sending 'CTRL_C' the program exits in the right way
   signal(SIGQUIT,PrintNumbers);//sending 'CTRL \' we print the numbers of taken events
-  
-  
+
+
   unsigned short usize=0;//a "short" are 16 bit (2 Bytes). sizeof() returns argument's number of Bytes
   int size_u_short=sizeof(u_short); //u_short is a typedef (I don't know in which library) to a generic unsigned short int (however sizeof(u_short) is 2!!)
-  
+
   //----------------opening data file for writing-----------------
   char datafilename[255];
 
@@ -708,9 +713,9 @@ int StartRun(AMSWcom *node, int nevents, int fake) {
   else {
     sprintf(datafilename,"%s/%d_ANC_%d.dat", JJ->CPars->DATAPATH, runnum, ancillary_code);
   }
-  
+
   struct stat buf;
-  
+
   if (stat(datafilename,&buf)==0) {
     ret=0;
     char reply[256];
@@ -726,7 +731,7 @@ int StartRun(AMSWcom *node, int nevents, int fake) {
       return 1;
     }
   }
-  
+
   FILE *datafile;
   if (daq) {
     datafile=fopen(datafilename,"wt");
@@ -735,18 +740,18 @@ int StartRun(AMSWcom *node, int nevents, int fake) {
       return 1;
     }
   }
-  
+
   //----------------------preparing headers--------------------------------
   wholeheader Head;//AMSBlock writing used
   unsigned short DSPCRC16=0;//Not in wholeheader struct because it must be wrote after data flow
-  
+
   header Header;//standard way writing used
-  
+
   if (daq){
     if(WritingMode==0){
       //needed by file writing in AMSBlock way
       HeaderReset(&Head,1);
-      
+
       Head.RUNNUMMSB=runnum>>16;
       Head.RUNNUMLSB=runnum&0xffff;
       PRINTF("Starting run %d\n",runnum);
@@ -756,14 +761,14 @@ int StartRun(AMSWcom *node, int nevents, int fake) {
     else if(WritingMode==1){
       //needed by file writing in "standard" way (not AMSBlock)
       headerReset(&Header);
-      
+
       sprintf(Header.date,"%s",TakeTime());
       Header.run=runnum;
       Header.refmaskjj=JJ->CPars->refmask;
       for (int i=0;i<JJ->NSlave;i++) {
 	Header.refmask[JJ->SlaveAdd[i]]=JJ->Slave[i]->CPars->refmask;
       }
-      
+
       //     PRINTF("Run: %d   Date: %s\n",Header.run,Header.date);//only for debug
       //     for (int ii=0;ii<4;ii++) {
       //       PRINTF("Angle (%d) = %f\n", ii, Header.gonpar[ii]);//only for debug
@@ -772,29 +777,29 @@ int StartRun(AMSWcom *node, int nevents, int fake) {
       //     for (int ii=0;ii<24;ii++) {
       //       PRINTF("Refmask (%d) = 0x%x\n", ii, Header.refmask[ii]);//only for debug
       //     }
-      
+
       unsigned short headsiz=sizeof(Header)/2;// translated into size of 16 bits words
       fwrite(&headsiz, sizeof(headsiz), 1, datafile);
       fwrite(&Header,sizeof(Header),1,datafile);
     }
   }
-  
+
   //--------------------preparing the last stuff...-------------------------
-  
+
   int evtcnt=0;//counts the number of data collected
   int sumsize=0;//counts the sum of the sizes of data collected
-  
+
   sleep(1);
-  
+
   ret=EventReset(node);
-  
+
   int errcnt=0;
-  
+
   sleep(3);
-  
+
   if(trig->TriggerOn()) return 1;
   TESTRXDONE(node);
-  
+
   pid_t pid= getpid();
   FILE* pid_file=fopen("./TakeJPCI.pid","w+");
   fprintf(pid_file,"%d\n",pid);
@@ -807,14 +812,14 @@ int StartRun(AMSWcom *node, int nevents, int fake) {
   else {
     PRINTF("Entering into the (Fake) Data Acquisition loop...\n");
   }
-  
+
   FILE* nlog=fopen("./log/nlog.txt","w");
   FILE* tlog=fopen("./log/tlog.txt","w");
 
   int timecounter = 1;
   eventsinbuffer=MAXEVENTSINBUFFER;
   printevent=0;
-  
+
   int logtime;
   starttime = time(NULL);
   printf("DAQ start time %i\n",starttime);
@@ -828,7 +833,7 @@ int StartRun(AMSWcom *node, int nevents, int fake) {
 
   while(ControlOn) {
     //    PrintAllEventNumber(evtcnt, sumsize);//only for debug
-    
+
     logtime = time(NULL);
 
     if((logtime-starttime)==timecounter*timestep)  {
@@ -840,7 +845,7 @@ int StartRun(AMSWcom *node, int nevents, int fake) {
       sumsize=0;
       ++timecounter;
     }else if((evtcnt%step==0&&evtcnt!=0)||printevent)  {
-      //      PRINTF("PrintEvent: %d\n", printevent);//only for debug                                                                          
+      //      PRINTF("PrintEvent: %d\n", printevent);//only for debug
       printevent=0;
       usleep(50000);
       PrintAllEventNumber(evtcnt, sumsize);
@@ -849,12 +854,12 @@ int StartRun(AMSWcom *node, int nevents, int fake) {
 
 
     usize=0;
-    
+
     usize=node->GetEvent(0xffff);//The real data taking from main node!! This give back the size of the event (in unit of 16 bit words)
-    
+
     Head.DSPSIZE=usize*2+4;
     Head.SIZE=(ushort)(8+2+Head.JMDCSIZE+2+Head.DSPSIZE);
-    
+
     if (usize>0) {
       sumsize+=usize;
       //  PRINTF("Counted %d events\n",evtcnt);//only for debug
@@ -866,13 +871,13 @@ int StartRun(AMSWcom *node, int nevents, int fake) {
 	sumsize=0;
 	errcnt++;
       }
-      
+
       evtcnt++;//another event is took...
       //      PRINTF("Event took: %d (size: %d, status: %x)\n", evtcnt, usize, JStatus);//only for debug
       //      for (int ii=0; ii<usize; ii++){
       //	PRINTF("%x\n", node->Event[ii]);//only for debug
       //      }
-      
+
       if(daq){
 	if (WritingMode==0){
 	  gettimeofday(&unixtime, NULL);
@@ -882,7 +887,7 @@ int StartRun(AMSWcom *node, int nevents, int fake) {
 	  Head.JMDCTIMELSB=(ushort)(unixtime.tv_sec&0xffff);
 	  Head.JMDCTIMEFINEMSB=(ushort)(unixtime.tv_usec>>16&0xffff);
 	  Head.JMDCTIMEFINELSB=(ushort)(unixtime.tv_usec&0xffff);
-	  
+
 	  Head.EVTNUMMSB=evtcnt>>16;
 	  Head.EVTNUMLSB=evtcnt&0xffff;
 	  fwrite(&Head, sizeof(Head), 1, datafile);
@@ -896,22 +901,22 @@ int StartRun(AMSWcom *node, int nevents, int fake) {
 	  fwrite(node->Event,usize*size_u_short,1,datafile);
 	}
       }
-      
+
       int evtnumoffset=0;/*useful if there's the event number at the beginning of the data flow (the code is made to work if:
 			   event# + JINF1-Size ..... JINF1-Status + ... + JINFN-Size .... JINFN-Status)
 			   and if usize is the size of data comprised the event# word at the beginning*/
-      
+
       //ret=+StatusJinj(node, evtnumoffset, usize, evtcnt);//The control is yet no working properly...
-      
+
     }
     if (evtcnt==nevents || eventsinbuffer<MAXEVENTSINBUFFER) StopRun(0);//if ControlOn becomes 0 we exit from the data taking loop, if nevents is 0, the condition is false even the first time
   }
-  
+
   if(daq) fclose(datafile);
-  
+
   JJ->GetEventNumber();
   PrintAllEventNumber(evtcnt, sumsize);//only for debug
-  if(daq){ 
+  if(daq){
     PRINTF("Exited from the acquisition, file %s saved.\n", datafilename);
   }
   else {
@@ -921,7 +926,7 @@ int StartRun(AMSWcom *node, int nevents, int fake) {
   SLPRINTF("RUN %d [%d events]\n", runnum, evtcnt);
   PRINTF("There were %d errors during run.\n",errcnt);
   unlink("./TakeJPCI.pid");
-  
+
   ancillary_code++;
   //if ((stream = fopen(CPars->CONFPATH, "w"))) {
   //	fprintf(stream, "[INDEXES]\ndata=%d\n", ancillary_code);
@@ -935,10 +940,10 @@ int StartRun(AMSWcom *node, int nevents, int fake) {
   char systemcommand[255];
   sprintf(systemcommand, "cp -v %s %s", datafilename, newfilename);
   system(systemcommand);
-  
+
   /* lets syncrhonize everything */
   //	system("./synchronize.sh");
-  
+
   return ret;
 }
 
@@ -1002,7 +1007,7 @@ void PrintEventNumberTime(int evtcnt, int sumsize) {
   sprintf(reply,"%s", JJ->PrintAllEventNumber());
 
   int cc=0;
-  if(!(JJ->GetJLV1Pointer()))  cc=trig->ReadCounter();//ReadCounter works only with NI-USB (so not with JLV1)                                                    
+  if(!(JJ->GetJLV1Pointer()))  cc=trig->ReadCounter();//ReadCounter works only with NI-USB (so not with JLV1)
   else cc=evtcnt;
 
   FILE* tlog=fopen("./log/tlog.txt","a");
@@ -1035,7 +1040,7 @@ int StatusJinj(AMSWcom *node, int start, int datasize, int evtnum) {
 				ret+=StatusJinf(node, substart, size, evtnum);
 			}
 			if (aa->CPars->type==1){//it's a Jlv1...
-				ret+=CheckStatus("JLV1", status, evtnum, 255); 
+				ret+=CheckStatus("JLV1", status, evtnum, 255);
 			}
 		}
 		substart+=size+1;
@@ -1146,7 +1151,7 @@ int CheckStatus(const char* nodetype, unsigned short status, int evtnum, unsigne
 				}
 			}
 		}
-	} 
+	}
 	return ret;
 }
 

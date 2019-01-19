@@ -9,47 +9,47 @@
 #define CANVAS_X 300
 #define CANVAS_Y 800
 extern "C" {
-#include <unistd.h>
-#include <stdio.h>
-#include <dirent.h>
-#include <sys/time.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <linux/limits.h>
-using namespace std;
-typedef struct s_file_info {
-	char file_name[PATH_MAX];
-	int last_change, assigned:1, refresh:1;
-} s_file_info;
-struct s_file_info last_file, current_file;
-void f_analyze_file(char *file) {
-	struct stat file_attribute;
-	stat(file, &file_attribute);
-	if ((last_file.last_change < file_attribute.st_ctime) || (!last_file.assigned)) {
-		strcpy(last_file.file_name, file);
-		last_file.last_change = file_attribute.st_mtime;
-		last_file.assigned = 1;
+	#include <unistd.h>
+	#include <stdio.h>
+	#include <dirent.h>
+	#include <sys/time.h>
+	#include <sys/stat.h>
+	#include <sys/types.h>
+	#include <linux/limits.h>
+	using namespace std;
+	typedef struct s_file_info {
+		char file_name[PATH_MAX];
+		int last_change, assigned:1, refresh:1;
+	} s_file_info;
+	struct s_file_info last_file, current_file;
+	void f_analyze_file(char *file) {
+		struct stat file_attribute;
+		stat(file, &file_attribute);
+		if ((last_file.last_change < file_attribute.st_ctime) || (!last_file.assigned)) {
+			strcpy(last_file.file_name, file);
+			last_file.last_change = file_attribute.st_mtime;
+			last_file.assigned = 1;
+		}
 	}
-}
 
-void f_search_file(char *directory) {
-	DIR *stream;
-	struct dirent *descriptor;
-	char next_directory[PATH_MAX];
-	size_t length;
-	if ((stream = opendir(directory))) {
-		while ((descriptor = readdir(stream)))
+	void f_search_file(char *directory) {
+		DIR *stream;
+		struct dirent *descriptor;
+		char next_directory[PATH_MAX];
+		size_t length;
+		if ((stream = opendir(directory))) {
+			while ((descriptor = readdir(stream)))
 			if ((descriptor->d_name[0] != '.')) {
 				length = strlen(directory);
 				if (directory[length-1] == '/')
-					directory[length-1] = '\0';
+				directory[length-1] = '\0';
 				snprintf(next_directory, PATH_MAX, "%s/%s", directory, descriptor->d_name);
 				f_search_file(next_directory);
 			}
-		closedir(stream);
-	} else
+			closedir(stream);
+		} else
 		f_analyze_file(directory);
-}
+	}
 }
 TCanvas *f_generate_canvas(const char *name, const char *title, int divisions_x=1, int divisions_y=1) {
 	TCanvas *result = NULL;
@@ -58,7 +58,7 @@ TCanvas *f_generate_canvas(const char *name, const char *title, int divisions_x=
 		result->SetBorderMode(0);
 		result->SetFrameBorderMode(0);
 		if ((divisions_x != 1) || (divisions_y != 1))
-			result->Divide(divisions_x, divisions_y, 0, 0);
+		result->Divide(divisions_x, divisions_y, 0, 0);
 	}
 	return result;
 }
@@ -73,7 +73,7 @@ TH1F *f_generate_plot(const char *name, const char *title, float low_x, float hi
 		result->SetFillColor(kRed);
 		result->SetFillStyle(3005);
 	}
-	return result; 
+	return result;
 }
 
 void f_refresh_plots(TCanvas *canvas, TH1F *plots[PLOTS]) {
@@ -88,18 +88,18 @@ void f_refresh_plots(TCanvas *canvas, TH1F *plots[PLOTS]) {
 bool p_check_file(struct s_file_info left, struct s_file_info right) {
 	bool result = true;
 	if (left.assigned)
-		if ((!right.assigned) || (strcmp(left.file_name, right.file_name) != 0) || (left.last_change > right.last_change))
-			result = false;
+	if ((!right.assigned) || (strcmp(left.file_name, right.file_name) != 0) || (left.last_change > right.last_change))
+	result = false;
 	return result;
 }
 
 void f_check_file(void) {
 	if (last_file.assigned)
-		if (!p_check_file(last_file, current_file)) {
-			memcpy(&current_file, &last_file, sizeof(struct s_file_info));
-			last_file.assigned = 0;
-			current_file.refresh = 1;
-		}
+	if (!p_check_file(last_file, current_file)) {
+		memcpy(&current_file, &last_file, sizeof(struct s_file_info));
+		last_file.assigned = 0;
+		current_file.refresh = 1;
+	}
 }
 
 int run_me (int argc, char *argv[]) {
