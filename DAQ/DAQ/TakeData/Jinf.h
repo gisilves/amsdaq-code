@@ -11,10 +11,10 @@ struct Calibration{
     int sta[1024];
     short int occupancy[1024];
     short int CNrms[1024];
-    short int CNmean[1024];
+    short int CNmean[1024];  
     double S_lowthres;
     double S_highthres;
-    double K_lowthres;
+    double K_lowthres;  
     double K_highthres;
     double sigrawthres;
     int calnum;
@@ -24,8 +24,7 @@ struct Calibration{
 class Jinf : public JinjSlave{
 
 public:
-  int FlagFake;
-  Jinf(char* name,char* conf_file,int address,AMSWcom* node, int flagfake);
+  Jinf(char* name,char* conf_file,int address,AMSWcom* node);
   ~Jinf();
   int Init();
   int ReadSlaveMask();

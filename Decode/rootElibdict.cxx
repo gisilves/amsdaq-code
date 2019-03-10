@@ -163,7 +163,7 @@ namespace ROOT {
       ::RHClass *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::RHClass >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("RHClass", ::RHClass::Class_Version(), "Event.hh", 201,
+         instance("RHClass", ::RHClass::Class_Version(), "Event.hh", 208,
                   typeid(::RHClass), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::RHClass::Dictionary, isa_proxy, 4,
                   sizeof(::RHClass) );
@@ -416,9 +416,9 @@ namespace {
 0
     };
     static const char* includePaths[] = {
-"/usr/share/root/root/include",
-"/usr/share/root/root/include",
-"/home/gigi/amsdaq-code/Decode/",
+"/opt/root6/include",
+"/opt/root6/include",
+"/home/gigi/Root/amsdaq-code/Decode/",
 0
     };
     static const char* fwdDeclCode = R"DICTFWDDCLS(

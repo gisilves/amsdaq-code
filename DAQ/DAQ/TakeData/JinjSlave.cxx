@@ -1,5 +1,5 @@
 #include <sys/time.h>
-#include <sys/stat.h>
+#include <sys/stat.h> 
 #include <cstring> // needed to add for gcc 4.3
 #include "JinjSlave.h"
 #include "PUtil.h"
@@ -11,7 +11,7 @@ ConfPars::ConfPars() {
 	Ntdrs=NTDRS;
 	delay=0x96; // units of 20 ns --> 0x96= 3 mu sec //Non sò se ci sarà un qualche parametro di questo tipo sul JLV1, magari la frequenza del generatore...
 	JINFflash=0;
-	TDRflash=0;
+	TDRflash=0; 
 	JLV1flash=0;
 	memset(mode,0,sizeof(mode));
 	sprintf(DATAPATH,"");
@@ -31,7 +31,7 @@ int ConfPars::ReadConfig(char * conf_file) {
   int ret=0;
   char dummy[100];
   FILE *file=fopen(conf_file,"r");
-
+  
   if (file==NULL) {
     PRINTF("ERROR: The configuration file %s was not found, I need this file\n", conf_file);
     return 1;
@@ -51,7 +51,7 @@ int ConfPars::ReadConfig(char * conf_file) {
       fscanf(file,"%s %hx  ",&dummy, &JLV1flash);
       fscanf(file,"%s %d  ",&dummy, &delay);
       delay/=20;
-
+      
       LPRINTF("JLV1 program: 0x%04x\n", JLV1flash);
     } else if (strstr(conf_file,"JINF")){
       type=0;
@@ -60,7 +60,7 @@ int ConfPars::ReadConfig(char * conf_file) {
       fscanf(file,"%s %d  ",&dummy, &delay);
       delay/=20;
       fscanf(file,"%s %s %s %s %s %s %s %s %s",&dummy, &dummy, &dummy, &dummy, &dummy, &dummy, &dummy, &dummy, &dummy);
-
+      
       int a, tmp, inutile;
       float b,c,d,e,f,g;
       for (int tdr=0; tdr<NTDRS; tdr++) {
@@ -75,25 +75,25 @@ int ConfPars::ReadConfig(char * conf_file) {
 	//			printf("SLowTrash: %hx, SHighTrash: %hx, KLowTrash: %hx, KHighTrash: %hx, SigmaRowTrash: %hx, OccupancyThresh: %hx\n",
 	//						SLowTrash[tdr], SHighTrash[tdr], KLowTrash[tdr], KHighTrash[tdr], SigmaRowTrash[tdr], OccupancyThresh[tdr]);//only for debug
 	refmask = inutile;
-	//		printf("Tdr number %d : %d, %d; refmask : %hx\n", a, tmp, mode[tdr], refmask);//only for debug
+	//		printf("Tdr number %d : %d, %d; refmask : %hx\n", a, tmp, mode[tdr], refmask);//only for debug    
 	if(tmp) refmask|=1<<tdr;
 	tmp=0;
       }
-
+      
       LPRINTF("TDR program: 0x%04x\n", TDRflash);
       LPRINTF("JINF program: 0x%04x\n", JINFflash);
-
+      
     }
-
+    
     else PRINTF("The configuration file isn't named with 'JLV1' or 'JINF'\n");
   }
-
+  
   fclose(file);
   return ret;
 }
 
 //--------------------------------------------------------------
-JinjSlave::JinjSlave(char* name,char* conf_file,int address,AMSWcom* node_in, int flagfake){
+JinjSlave::JinjSlave(char* name,char* conf_file,int address,AMSWcom* node_in){
   //  logfile=log;
   sprintf(myname,"%s",name);
   selfaddress=address;
@@ -103,7 +103,7 @@ JinjSlave::JinjSlave(char* name,char* conf_file,int address,AMSWcom* node_in, in
   CPars= new ConfPars();
   CPars->ReadConfig(conf_file);
   mask.Nmask=0;
-  for (int ii=0;ii<16;ii++) mask.ID[ii]=0;
+  for (int ii=0;ii<16;ii++) mask.ID[ii]=0; 
   jlv1events=0;
   jinfevents[0]=0;
   jinfevents[1]=0;
@@ -112,6 +112,6 @@ JinjSlave::JinjSlave(char* name,char* conf_file,int address,AMSWcom* node_in, in
 }
 //--------------------------------------------------------------
 JinjSlave::~JinjSlave(){
-
+  
   if(CPars) delete CPars;
 }

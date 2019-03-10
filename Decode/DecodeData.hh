@@ -5,6 +5,8 @@
 #include "TH2F.h"
 #include <cstdio>
 
+//#define CALOCUBE
+
 typedef struct calib{
   float ped[1024];
   float rsig[1024];
@@ -26,8 +28,40 @@ struct header {			//for file writing NOT in AMSBlock
 
 #pragma pack(pop)
 
-class DecodeData {
+//this kind of header has been put by E. Berti, in the CALOCUBE "flavour" but just for a misunderstanding of the DAQ code: there we write files with the other WritingMethod, unused since years, and so this is header is useless: for sure in this Decode is not needed.
+#pragma pack(push, 1)
 
+struct wholeheader {
+	//---- Primary and secondary header ---------------------//
+	unsigned short SIZE;
+	unsigned short RRRWNODETYPE;
+	unsigned short FBITAG;
+	unsigned short TIMEMSB;
+	unsigned short TIMELSB;
+	//---- JMDC data block ----------------------------------//
+	unsigned short JMDCSIZE;
+	unsigned short JMDCRRRWNODETYPE;
+
+	unsigned short RUNNUMMSB;
+	unsigned short RUNNUMLSB;
+	unsigned short RUNTAGMSB;
+	unsigned short RUNTAGLSB;
+	unsigned short EVTNUMMSB;
+	unsigned short EVTNUMLSB;
+	unsigned short JMDCTIMEMSB;
+	unsigned short JMDCTIMELSB;
+	unsigned short JMDCTIMEFINEMSB;
+	unsigned short JMDCTIMEFINELSB;
+	unsigned short GReservedGroups;
+	//---- DSP Slave Format ----------------------------------//
+	unsigned short DSPSIZE;
+	unsigned short DSPRRRWNODETYPE;
+};
+
+#pragma pack(pop)
+
+class DecodeData {
+  
 private:
   FILE* rawfile;
   char rawname[300];
@@ -56,11 +90,11 @@ private:
   void mysort(int* aa,int nel);
 
   bool kMC;
-
+  
 public:
   Event * ev;
   RHClass *rh;
-
+  
   int evenum;
   TH1F* hocc[NJINF*NTDRS];
   TH1F* hoccseed[NJINF*NTDRS];
@@ -77,9 +111,9 @@ public:
 
   bool kClusterize;
   int cworkaround;
-
+  
   void DumpRunHeader();
-
+  
 public:
   DecodeData(char * ifname, char* caldir, int run, int ancillary, bool _kMC=false);
   ~DecodeData();
@@ -94,7 +128,7 @@ public:
   int GetNTDRCmp() { return ntdrCmp;}
   int GetIdTDRRaw(int pos);
   int GetIdTDRCmp(int pos);
-
+  
   int SkipOneEvent(int evskip=1);
   int ReadOneEvent();
 
@@ -108,12 +142,12 @@ public:
   int ReadOneTDR(int jinf=0);
   int ReadOneJINF();
   int SkipOneEvent_data(int evskip=1);
-
+  
   //mc
   void OpenFile_mc(char* ifname, char* caldir, int run, int ancillary);
   int ReadOneEvent_mc();
   int SkipOneEvent_mc(int evskip=1);
-
+  
   void SetPrintOff(){pri=0;}
   void SetPrintOn(){pri=1;}
   void SetEvPrintOff(){evpri=0;}

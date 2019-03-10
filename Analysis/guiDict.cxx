@@ -45,6 +45,49 @@ namespace std {} using namespace std;
 // Header files passed via #pragma extra_include
 
 namespace ROOT {
+   static TClass *pairlEintcOpairlEdoublecOdoublegRsPgR_Dictionary();
+   static void pairlEintcOpairlEdoublecOdoublegRsPgR_TClassManip(TClass*);
+   static void *new_pairlEintcOpairlEdoublecOdoublegRsPgR(void *p = 0);
+   static void *newArray_pairlEintcOpairlEdoublecOdoublegRsPgR(Long_t size, void *p);
+   static void delete_pairlEintcOpairlEdoublecOdoublegRsPgR(void *p);
+   static void deleteArray_pairlEintcOpairlEdoublecOdoublegRsPgR(void *p);
+   static void destruct_pairlEintcOpairlEdoublecOdoublegRsPgR(void *p);
+
+   // Function generating the singleton type initializer
+   static TGenericClassInfo *GenerateInitInstanceLocal(const pair<int,pair<double,double> >*)
+   {
+      pair<int,pair<double,double> > *ptr = 0;
+      static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(pair<int,pair<double,double> >));
+      static ::ROOT::TGenericClassInfo 
+         instance("pair<int,pair<double,double> >", "string", 198,
+                  typeid(pair<int,pair<double,double> >), ::ROOT::Internal::DefineBehavior(ptr, ptr),
+                  &pairlEintcOpairlEdoublecOdoublegRsPgR_Dictionary, isa_proxy, 4,
+                  sizeof(pair<int,pair<double,double> >) );
+      instance.SetNew(&new_pairlEintcOpairlEdoublecOdoublegRsPgR);
+      instance.SetNewArray(&newArray_pairlEintcOpairlEdoublecOdoublegRsPgR);
+      instance.SetDelete(&delete_pairlEintcOpairlEdoublecOdoublegRsPgR);
+      instance.SetDeleteArray(&deleteArray_pairlEintcOpairlEdoublecOdoublegRsPgR);
+      instance.SetDestructor(&destruct_pairlEintcOpairlEdoublecOdoublegRsPgR);
+
+      ::ROOT::AddClassAlternate("pair<int,pair<double,double> >","pair<int,std::pair<double,double> >");
+      return &instance;
+   }
+   // Static variable to force the class initialization
+   static ::ROOT::TGenericClassInfo *_R__UNIQUE_DICT_(Init) = GenerateInitInstanceLocal((const pair<int,pair<double,double> >*)0x0); R__UseDummy(_R__UNIQUE_DICT_(Init));
+
+   // Dictionary for non-ClassDef classes
+   static TClass *pairlEintcOpairlEdoublecOdoublegRsPgR_Dictionary() {
+      TClass* theClass =::ROOT::GenerateInitInstanceLocal((const pair<int,pair<double,double> >*)0x0)->GetClass();
+      pairlEintcOpairlEdoublecOdoublegRsPgR_TClassManip(theClass);
+   return theClass;
+   }
+
+   static void pairlEintcOpairlEdoublecOdoublegRsPgR_TClassManip(TClass* ){
+   }
+
+} // end of namespace ROOT
+
+namespace ROOT {
    static void *new_Cluster(void *p = 0);
    static void *newArray_Cluster(Long_t size, void *p);
    static void delete_Cluster(void *p);
@@ -121,7 +164,7 @@ namespace ROOT {
       ::RHClass *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::RHClass >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("RHClass", ::RHClass::Class_Version(), "../Decode/Event.hh", 201,
+         instance("RHClass", ::RHClass::Class_Version(), "../Decode/Event.hh", 208,
                   typeid(::RHClass), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::RHClass::Dictionary, isa_proxy, 4,
                   sizeof(::RHClass) );
@@ -141,25 +184,25 @@ namespace ROOT {
 } // end of namespace ROOT
 
 namespace ROOT {
-   static TClass *MyMainFrame_Dictionary();
-   static void MyMainFrame_TClassManip(TClass*);
    static void delete_MyMainFrame(void *p);
    static void deleteArray_MyMainFrame(void *p);
    static void destruct_MyMainFrame(void *p);
+   static void streamer_MyMainFrame(TBuffer &buf, void *obj);
 
    // Function generating the singleton type initializer
    static TGenericClassInfo *GenerateInitInstanceLocal(const ::MyMainFrame*)
    {
       ::MyMainFrame *ptr = 0;
-      static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(::MyMainFrame));
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::MyMainFrame >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("MyMainFrame", "src//viewerGUI.hh", 17,
+         instance("MyMainFrame", ::MyMainFrame::Class_Version(), "src//viewerGUI.hh", 18,
                   typeid(::MyMainFrame), ::ROOT::Internal::DefineBehavior(ptr, ptr),
-                  &MyMainFrame_Dictionary, isa_proxy, 0,
+                  &::MyMainFrame::Dictionary, isa_proxy, 16,
                   sizeof(::MyMainFrame) );
       instance.SetDelete(&delete_MyMainFrame);
       instance.SetDeleteArray(&deleteArray_MyMainFrame);
       instance.SetDestructor(&destruct_MyMainFrame);
+      instance.SetStreamerFunc(&streamer_MyMainFrame);
       return &instance;
    }
    TGenericClassInfo *GenerateInitInstance(const ::MyMainFrame*)
@@ -168,17 +211,6 @@ namespace ROOT {
    }
    // Static variable to force the class initialization
    static ::ROOT::TGenericClassInfo *_R__UNIQUE_DICT_(Init) = GenerateInitInstanceLocal((const ::MyMainFrame*)0x0); R__UseDummy(_R__UNIQUE_DICT_(Init));
-
-   // Dictionary for non-ClassDef classes
-   static TClass *MyMainFrame_Dictionary() {
-      TClass* theClass =::ROOT::GenerateInitInstanceLocal((const ::MyMainFrame*)0x0)->GetClass();
-      MyMainFrame_TClassManip(theClass);
-   return theClass;
-   }
-
-   static void MyMainFrame_TClassManip(TClass* ){
-   }
-
 } // end of namespace ROOT
 
 //______________________________________________________________________________
@@ -287,6 +319,62 @@ TClass *RHClass::Class()
 }
 
 //______________________________________________________________________________
+atomic_TClass_ptr MyMainFrame::fgIsA(0);  // static to hold class pointer
+
+//______________________________________________________________________________
+const char *MyMainFrame::Class_Name()
+{
+   return "MyMainFrame";
+}
+
+//______________________________________________________________________________
+const char *MyMainFrame::ImplFileName()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::MyMainFrame*)0x0)->GetImplFileName();
+}
+
+//______________________________________________________________________________
+int MyMainFrame::ImplFileLine()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::MyMainFrame*)0x0)->GetImplFileLine();
+}
+
+//______________________________________________________________________________
+TClass *MyMainFrame::Dictionary()
+{
+   fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::MyMainFrame*)0x0)->GetClass();
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+TClass *MyMainFrame::Class()
+{
+   if (!fgIsA.load()) { R__LOCKGUARD(gInterpreterMutex); fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::MyMainFrame*)0x0)->GetClass(); }
+   return fgIsA;
+}
+
+namespace ROOT {
+   // Wrappers around operator new
+   static void *new_pairlEintcOpairlEdoublecOdoublegRsPgR(void *p) {
+      return  p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) pair<int,pair<double,double> > : new pair<int,pair<double,double> >;
+   }
+   static void *newArray_pairlEintcOpairlEdoublecOdoublegRsPgR(Long_t nElements, void *p) {
+      return p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) pair<int,pair<double,double> >[nElements] : new pair<int,pair<double,double> >[nElements];
+   }
+   // Wrapper around operator delete
+   static void delete_pairlEintcOpairlEdoublecOdoublegRsPgR(void *p) {
+      delete ((pair<int,pair<double,double> >*)p);
+   }
+   static void deleteArray_pairlEintcOpairlEdoublecOdoublegRsPgR(void *p) {
+      delete [] ((pair<int,pair<double,double> >*)p);
+   }
+   static void destruct_pairlEintcOpairlEdoublecOdoublegRsPgR(void *p) {
+      typedef pair<int,pair<double,double> > current_t;
+      ((current_t*)p)->~current_t();
+   }
+} // end of namespace ROOT for class pair<int,pair<double,double> >
+
+//______________________________________________________________________________
 void Cluster::Streamer(TBuffer &R__b)
 {
    // Stream an object of class Cluster.
@@ -385,6 +473,14 @@ namespace ROOT {
    }
 } // end of namespace ROOT for class ::RHClass
 
+//______________________________________________________________________________
+void MyMainFrame::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class MyMainFrame.
+
+   ::Error("MyMainFrame::Streamer", "version id <=0 in ClassDef, dummy Streamer() called"); if (R__b.IsReading()) { }
+}
+
 namespace ROOT {
    // Wrapper around operator delete
    static void delete_MyMainFrame(void *p) {
@@ -396,6 +492,10 @@ namespace ROOT {
    static void destruct_MyMainFrame(void *p) {
       typedef ::MyMainFrame current_t;
       ((current_t*)p)->~current_t();
+   }
+   // Wrapper around a custom streamer member function.
+   static void streamer_MyMainFrame(TBuffer &buf, void *obj) {
+      ((::MyMainFrame*)obj)->::MyMainFrame::Streamer(buf);
    }
 } // end of namespace ROOT for class ::MyMainFrame
 
@@ -409,8 +509,8 @@ namespace {
 0
     };
     static const char* includePaths[] = {
-"/usr/share/root/root/include",
-"/home/gigi/amsdaq-code/Analysis/",
+"/opt/root6/include",
+"/home/gigi/Root/amsdaq-code/Analysis/",
 0
     };
     static const char* fwdDeclCode = R"DICTFWDDCLS(
@@ -419,6 +519,8 @@ namespace {
 #pragma clang diagnostic ignored "-Wignored-attributes"
 #pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
 extern int __Cling_Autoloading_Map;
+namespace std{template <typename _T1, typename _T2> struct __attribute__((annotate("$clingAutoload$bits/stl_pair.h")))  __attribute__((annotate("$clingAutoload$string")))  pair;
+}
 class __attribute__((annotate("$clingAutoload$../Decode//Event.cxx")))  Cluster;
 class __attribute__((annotate("$clingAutoload$../Decode//Event.cxx")))  Event;
 class __attribute__((annotate("$clingAutoload$../Decode//Event.cxx")))  RHClass;
